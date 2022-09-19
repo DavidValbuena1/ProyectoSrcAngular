@@ -4,7 +4,6 @@ import { DetalleordencompraService } from 'src/app/servicios/detalleordencompra.
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import { OrdencompraService } from 'src/app/servicios/ordencompra.service';
 import { ProveedorService } from 'src/app/servicios/proveedor.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-historialordenes',
