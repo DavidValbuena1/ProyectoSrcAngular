@@ -1,0 +1,97 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
+      <form>
+        <span class="p-float-label">
+          <p-autoComplete id="producto" [suggestions]="filtroproductos" [(ngModel)]="producto"
+            (completeMethod)="filtrarProducto($event)" field="nombre" [dropdown]="true"
+            [ngModelOptions]="{standalone: true}">
+            <ng-template let-c pTemplate="item">
+              <div>{{c.nombre}}</div>
+            </ng-template>
+          </p-autoComplete>
+          <label for="producto">Id o nombre del producto</label>
+        </span>
+        <button (click)="llenarDatosFormulario(producto)">Buscar</button>
+      </form>
+    </div>
+    <div class="col-md-7">
+      <form>
+        <span class="p-float-label">
+          <input id="nombre" pInputText [(ngModel)]="nombreproducto" [ngModelOptions]="{standalone: true}">
+          <label for="nombre">Nombre</label>
+        </span>
+        <span class="p-float-label">
+          <input id="talla" pInputText [(ngModel)]="talla" [ngModelOptions]="{standalone: true}">
+          <label for="talla">Talla</label>
+        </span>
+        <span class="p-float-label">
+          <input id="preciounidad" pInputText [(ngModel)]="precioUnidad" [ngModelOptions]="{standalone: true}">
+          <label for="preciounidad">Precio por Unidad</label>
+        </span>
+        <span class="p-float-label">
+          <input id="cantidad" pInputText [(ngModel)]="cantidadproducto" [ngModelOptions]="{standalone: true}">
+          <label for="cantidad">Cantidad</label>
+        </span>
+        <button (click)="agregarAlCarrito()">Agregar</button>
+      </form>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <p-table [value]="carrito" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
+      [rowsPerPageOptions]="[5,10,25,50]" [resizableColumns]="true" columnResizeMode="expand"
+      styleClass="p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre<p-columnFilter type="text" field="nombre" display="menu"></p-columnFilter>
+            </th>
+            <th>Talla<p-columnFilter type="text" field="talla" display="menu"></p-columnFilter>
+            </th>
+            <th>Cantidad<p-columnFilter type="text" field="cantidad" display="menu"></p-columnFilter>
+            </th>
+            <th>Precio por unidad<p-columnFilter type="text" field="preciounidad" display="menu"></p-columnFilter>
+            </th>
+            <th>Precio total<p-columnFilter type="text" field="preciototal" display="menu"></p-columnFilter>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-detalle>
+          <tr>
+            <td>{{detalle.nombreproducto}}</td>
+            <td>{{detalle.talla}}</td>
+            <td>{{detalle.cantidadproducto}}</td>
+            <td>${{detalle.preciounidad}}</td>
+            <td>${{detalle.preciototal}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-5"></div>
+        <div class="col-md-3">
+          <span class="p-float-label">
+            <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
+            (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true"
+            [ngModelOptions]="{standalone: true}">
+            <ng-template let-c pTemplate="item">
+              <div>{{c.nombre}}</div>
+            </ng-template>
+          </p-autoComplete>
+          <label for="proveedor">Seleccione el proveedor</label>
+        </span>
+      </div>
+      <div class="col-md-2">
+        <label class="">Suma total: ${{precioTotal}}</label>
+      </div>
+      <div class="col-md-2">
+        <button (click)="GenerarOrden()">Generar orden</button>
+      </div>
+    </div>
+  </div>
+</div>

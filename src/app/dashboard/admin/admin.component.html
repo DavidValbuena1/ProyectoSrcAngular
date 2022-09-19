@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 justify-content-center align-items-center m-3">
+            <p-sidebar [(visible)]="barraLateralVisible" styleClass="bg-dark" [baseZIndex]="10000">
+                <button type="submit" class="btn btn-outline-primary text-white m-3" (click)="cerrarSesion()">Cerrar Sesion</button><br>
+                <button type="submit" class="btn btn-outline-primary text-white m-3" (click)="cambiarBoton('inventarios')">Inventario</button><br>
+                <button type="submit" class="btn btn-outline-primary text-white m-3" (click)="cambiarBoton('ordenes')">Ordenes de compra</button><br>
+                <button type="submit" class="btn btn-outline-primary text-white m-3" (click)="cambiarBoton('historialordenes')">Historial ordenes</button><br>
+                <button type="submit" class="btn btn-outline-primary text-white m-3" (click)="cambiarBoton('proveedores')">Proveedores</button><br>
+                <button type="submit" class="btn btn-outline-primary text-white m-3" (click)="cambiarBoton('ventas')">Ventas</button><br>
+            </p-sidebar>
+            <p-button type="button" (click)="barraLateralVisible= true" icon="pi pi-arrow-right"></p-button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div *ngIf="nombreBotonSeleccionado=='inventarios'">
+                <app-admin-inventarios></app-admin-inventarios>
+            </div>
+            <div *ngIf="nombreBotonSeleccionado=='ordenes'">
+                <app-admin-ordenes></app-admin-ordenes>
+            </div>
+            <div *ngIf="nombreBotonSeleccionado=='proveedores'">
+                <app-admin-proveedores></app-admin-proveedores>
+            </div>
+            <div *ngIf="nombreBotonSeleccionado=='ventas'">
+                <app-admin-ventas></app-admin-ventas>
+            </div>
+            <div *ngIf="nombreBotonSeleccionado=='historialordenes'">
+              <app-historialordenes></app-historialordenes>
+          </div>
+        </div>
+    </div>
+</div>
