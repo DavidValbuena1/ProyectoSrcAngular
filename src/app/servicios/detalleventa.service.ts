@@ -9,6 +9,6 @@ export class DetalleventaService {
   constructor(private http:HttpClient) { }
 
   enviarCarrito(data:any){
-    return this.http.post("http://localhost:8880/Sioca/DetalleVenta/agregar",data);
+    return this.http.post("https://proyectosioca.azurewebsites.net/Sioca/DetalleVenta/agregar",data);
   }
 }
