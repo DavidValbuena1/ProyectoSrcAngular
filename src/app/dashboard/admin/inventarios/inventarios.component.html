@@ -1,6 +1,7 @@
 <div class="container-fluid">
   <div class="row me-1 ms-1">
     <div class="col-md-7">
+      <button (click)="exportarGrafico()">Prueba1</button>
       <button type="button" (click)="abrirmodalRegistro()" icon="pi pi-info-circle">Registrar</button>
       <p-table [value]="this.listaProductos" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
@@ -65,8 +66,8 @@
         </ng-template>
       </p-table>
     </div>
-    <div class="col-md-5">
-      <p-chart type="pie" [data]="data" [options]="chartOptions"></p-chart>
+    <div class="col-md-5" id="grafico">
+      <canvas id="myChart" height="500"></canvas>
     </div>
   </div>
 </div>

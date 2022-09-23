@@ -11,4 +11,8 @@ export class CategoriaService {
   obtenerCategorias():any{
     return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Categoria/listar");
   }
+
+  buscarCategoriaPorNombre(data:any){
+    return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Categoria/listarPorNombre/"+data);
+  }
 }

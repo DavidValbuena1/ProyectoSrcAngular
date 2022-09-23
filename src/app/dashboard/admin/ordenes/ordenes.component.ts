@@ -3,7 +3,7 @@ import { DetalleordencompraService } from 'src/app/servicios/detalleordencompra.
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import { OrdencompraService } from 'src/app/servicios/ordencompra.service';
 import { ProveedorService } from 'src/app/servicios/proveedor.service';
-import { FormGroup, FormControl, FormArray, Validators, UntypedFormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators} from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -110,14 +110,14 @@ export class OrdenesAdminComponent implements OnInit {
                   .enviarOrdenAlProveedor(this.carrito)
                   .subscribe((x: any) => {
                   });
-                Swal.fire(
-                  'Operación Exitosa',
-                  'Se genero la orden de compra y fue enviada una copia al proveedor por correo',
-                  'success'
-                );
-                this.carrito = [];
-                this.proveedor = "";
-                this.precioTotal = "";
+                      Swal.fire(
+                        'Operación Exitosa',
+                        'Se genero la orden de compra y fue enviada una copia al proveedor por correo',
+                        'success'
+                      );
+                    this.carrito = [];
+                    this.proveedor = "";
+                    this.precioTotal = "";
               });
           });
         });
@@ -169,8 +169,7 @@ export class OrdenesAdminComponent implements OnInit {
   }
 
   llenarDatosFormulario(event: any) {
-    console.log(event);
-    
+
     if (event != "" && event != undefined) {
       this.nombreproducto = event.nombre;
       this.talla = event.size;
@@ -247,53 +246,52 @@ export class OrdenesAdminComponent implements OnInit {
       this.talla = detalleorden.talla;
       this.cantidadproducto = detalleorden.cantidadproducto;
       this.precioUnidad = detalleorden.preciounidad;
-      this.producto = detalleorden.productos;      
+      this.producto = detalleorden.productos;
       this.observaciones=detalleorden.observaciones;
       this.descuento=detalleorden.descuento;
       this.numeroproducto2=detalleorden.numeroproducto;
       this.nombreproducto=detalleorden.nombreproducto;
-    
+
+  }
+
+  borrarProductoCarrito(event:number){
+    console.log(event);
+    let carritoborrado:any=[];
+    this.numeroproducto=0;
+    for(let y of this.carrito){
+      if(y.numeroproducto!=event){
+        this.numeroproducto=this.numeroproducto+1;
+        y.numeroproducto=this.numeroproducto
+        carritoborrado.push(y);
+      }
+    }
+    this.carrito = carritoborrado;
+    this.precioTotal=0;
+    for (let x of this.carrito) {
+      this.precioTotal = this.precioTotal + x.preciototal;
+    }
   }
   actualizarCarrito(){
     let carrito2:any=[];
     let data: any = {
       numeroproducto:this.numeroproducto2,
-      nombreproducto: this.nombreproducto,
+      nombreproducto: this.producto.nombre,
       talla: this.talla,
       cantidadproducto: this.cantidadproducto,
       preciounidad: this.precioUnidad,
       preciototal: this.cantidadproducto * this.precioUnidad-((this.cantidadproducto * this.precioUnidad)*this.descuento/100),
       observaciones: this.observaciones,
       descuento: this.descuento,
-      producto: this.producto
+      productos: this.producto
     };
-    carrito2.push(data);
     for(let f of this.carrito){
-
-      let data: any = {
-        numeroproducto:this.numeroproducto=this.numeroproducto+1,
-        nombreproducto: this.nombreproducto,
-        talla: this.talla,
-        cantidadproducto: this.cantidadproducto,
-        preciounidad: this.precioUnidad,
-        preciototal: this.cantidadproducto * this.precioUnidad-((this.cantidadproducto * this.precioUnidad)*this.descuento/100),
-        observaciones: this.observaciones,
-        descuento: this.descuento,
-        productos: this.producto
-      };
-      carrito2.push(f);
+      if(this.numeroproducto2 !=f.numeroproducto){
+        carrito2.push(f);
+      }else if(this.numeroproducto2==f.numeroproducto){
+        carrito2.push(data);
+      }
     }
     this.carrito=carrito2;
-    this.nombreproducto = '';
-    this.talla = '';
-    this.cantidadproducto = '';
-    this.precioUnidad = '';
-    this.producto = '';
-    this.observaciones='';
-    this.descuento='';
-    this.ordenCompra = {
-      Idorden: 0,
-    };
     this.precioTotal = 0;
     for (let x of this.carrito) {
       this.precioTotal = this.precioTotal + x.preciototal;
@@ -312,10 +310,6 @@ export class OrdenesAdminComponent implements OnInit {
     this.ordenCompra = {
       Idorden: 0,
     };
-    this.precioTotal = 0;
-    for (let x of this.carrito) {
-      this.precioTotal = this.precioTotal + x.preciototal;
-    }
   }
 
   //Metodos para validación de formularios

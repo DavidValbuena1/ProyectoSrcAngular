@@ -1,143 +1,140 @@
 <div class="container-fluid">
   <div class="row mt-5 mb-5">
-    <div class="col-md-1"></div>
-    <div class="col-md-2">
-      <div class="card border border-primary rounded">
-        <form>
-          <div class="row mt-5 mb-4">
-            <h3 class="text-center mb-4">Buscar productos</h3>
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-              <span class="p-float-label">
-                <p-autoComplete id="producto" [suggestions]="filtroproductos" [(ngModel)]="producto"
-                  (completeMethod)="filtrarProducto($event)" field="nombre" [dropdown]="true"
-                  [ngModelOptions]="{standalone: true}">
-                  <ng-template let-c pTemplate="item">
-                    <div>{{c.nombre}}</div>
-                  </ng-template>
-                </p-autoComplete>
-                <label for="producto">Seleccione el producto</label>
-              </span>
-            </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-3">
-              <button pButton type="submit" (click)="llenarDatosFormulario(producto)" class="mt-5">Buscar</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="col-md-1"></div>
-    <div class="col-md-4">
-      <div class="card border border-success rounded ">
-
-        <form [formGroup]="formCarrito">
-          <div class="row mb-2 mt-3">
-            <h3 class="text-center mb-3">Rellenar datos para la orden</h3>
-            <div class="col-md-1"></div>
-            <div class="col-md-5 mb-4">
-              <span class="p-float-label">
-                <input id="nombre" pInputText [(ngModel)]="nombreproducto" formControlName="name">
-                <label for="nombre">Nombre</label>
-              </span>
-              <div *ngIf="this.envio">
-                <span class="text-danger" *ngIf="this.formCarrito.get('name')?.errors?.['required']"><Strong>
-                    El nombre no puede quedar vacío
-                  </Strong>
-                </span>
-              </div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-5 mb-4">
-              <span class="p-float-label">
-                <input id="talla" pInputText [(ngModel)]="talla" formControlName="talla">
-                <label for="talla">Talla</label>
-              </span>
-              <div *ngIf="this.envio">
-                <span class="text-danger" *ngIf="this.formCarrito.get('talla')?.errors?.['required']"><Strong>
-                    La talla no puede quedar vacia
-                  </Strong>
-                </span>
-              </div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-5 mb-4">
-              <span class="p-float-label">
-                <input pInputText type="number" id="preciounidad" [min]="0" [(ngModel)]="precioUnidad"
-                  formControlName="preciounidad">
-                <label for="preciounidad">Precio por Unidad</label>
-              </span>
-              <div *ngIf="this.envio">
-                <span class="text-danger" *ngIf="this.formCarrito.get('preciounidad')?.errors?.['required']"><Strong>
-                    El precio por unidad no puede quedar vacio
-                  </Strong>
-                </span>
-              </div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-5 mb-4">
-              <span class="p-float-label">
-                <input pInputText type="number" id="cantidad" [(ngModel)]="cantidadproducto" [min]="0"
-                  formControlName="cantidad">
-                <label for="cantidad">Cantidad</label>
-              </span>
-              <div *ngIf="this.envio">
-                <span class="text-danger" *ngIf="this.formCarrito.get('cantidad')?.errors?.['required']"><Strong>
-                    La cantidad no puede quedar vacio
-                  </Strong>
-                </span>
-              </div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-5 mb-4">
-              <span class="p-float-label">
-                <input pInputText id="observaciones" [(ngModel)]="observaciones" [ngModelOptions]="{standalone: true}">
-                <label for="observaciones">Observaciones</label>
-              </span>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-5 mb-4">
-              <span class="p-float-label">
-                <input pInputText type="number" id="descuento" [(ngModel)]="descuento" [min]="0"
-                  formControlName="descuento">
-                <label for="descuento">Descuento</label>
-              </span>
-              <div *ngIf="this.envio">
-                <span class="text-danger" *ngIf="this.formCarrito.get('descuento')?.errors?.['max']"><Strong>
-                    El descuento no puede ser mayor a 100%
-                  </Strong>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="row d-flex justify-content-center mb-3">
-            <div class="col-md-2">
-              <button pButton (click)="agregarAlCarrito()">Agregar</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="col-md-1"></div>
-    <div class="col-md-2">
-      <div class="card border rounded border-primary">
-        <div class="row mt-5">
-          <h3 class="text-center mb-4">Enviar Orden</h3>
-          <div class="col-md-12 d-flex justify-content-center mb-3">
+    <div class="col-md-1 mb-2"></div>
+    <div class="col-md-2 mb-5">
+      <form>
+        <div class="row mt-5 border border-success rounded">
+          <h3 class="text-center mb-4 mt-3">Buscar productos</h3>
+          <div class="col-md-12 d-flex justify-content-center">
             <span class="p-float-label">
-              <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
-                (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true"
+              <p-autoComplete id="producto" [suggestions]="filtroproductos" [(ngModel)]="producto"
+                (completeMethod)="filtrarProducto($event)" field="nombre" [dropdown]="true"
                 [ngModelOptions]="{standalone: true}">
                 <ng-template let-c pTemplate="item">
                   <div>{{c.nombre}}</div>
                 </ng-template>
               </p-autoComplete>
-              <label for="proveedor">Seleccione el proveedor</label>
+              <label for="producto">Producto</label>
             </span>
           </div>
           <div class="col-md-12 d-flex justify-content-center mb-5">
-            <button pButton (click)="GenerarOrden()">Generar orden</button>
+            <button pButton type="submit" (click)="llenarDatosFormulario(producto)" class="mt-3">Buscar</button>
           </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-1 mb-2"></div>
+    <div class="col-md-4 mb-5 border border-success rounded">
+
+      <form [formGroup]="formCarrito">
+        <div class="row mb-2 mt-3">
+          <h3 class="text-center mb-3">Rellenar datos para la orden</h3>
+
+          <div class="col-md-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input id="nombre" pInputText [(ngModel)]="nombreproducto" formControlName="name">
+              <label for="nombre">Nombre</label>
+            </span>
+          </div>
+
+
+          <div class="col-md-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input id="talla" pInputText [(ngModel)]="talla" formControlName="talla">
+              <label for="talla">Talla</label>
+            </span>
+          </div>
+
+          <div *ngIf="this.envio" class="col-md-6">
+            <span class="text-danger" *ngIf="this.formCarrito.get('name')?.errors?.['required']"><Strong>
+              El nombre no puede quedar vacío
+            </Strong>
+          </span>
+        </div>
+        <div *ngIf="this.envio" class="col-md-6">
+          <span class="text-danger" *ngIf="this.formCarrito.get('talla')?.errors?.['required']"><Strong>
+              La talla no puede quedar vacia
+            </Strong>
+          </span>
+        </div>
+
+          <div class="col-md-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText type="number" id="preciounidad" [min]="0" [(ngModel)]="precioUnidad"
+                formControlName="preciounidad">
+              <label for="preciounidad">Precio por Unidad</label>
+            </span>
+          </div>
+
+
+          <div class="col-md-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText type="number" id="cantidad" [(ngModel)]="cantidadproducto" [min]="0"
+                formControlName="cantidad">
+              <label for="cantidad">Cantidad</label>
+            </span>
+          </div>
+          <div *ngIf="this.envio" class="col-md-6">
+            <span class="text-danger" *ngIf="this.formCarrito.get('preciounidad')?.errors?.['required']"><Strong>
+                El precio por unidad no puede quedar vacio
+              </Strong>
+            </span>
+          </div>
+          <div *ngIf="this.envio" class="col-md-6">
+            <span class="text-danger" *ngIf="this.formCarrito.get('cantidad')?.errors?.['required']"><Strong>
+                La cantidad no puede quedar vacio
+              </Strong>
+            </span>
+          </div>
+
+
+          <div class="col-md-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText id="observaciones" [(ngModel)]="observaciones" [ngModelOptions]="{standalone: true}">
+              <label for="observaciones">Observaciones</label>
+            </span>
+          </div>
+
+          <div class="col-md-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText type="number" id="descuento" [(ngModel)]="descuento" [min]="0"
+                formControlName="descuento">
+              <label for="descuento">Descuento</label>
+            </span>
+          </div>
+          <div class="col-md-6"></div>
+          <div *ngIf="this.envio" class="col-md-6">
+            <span class="text-danger" *ngIf="this.formCarrito.get('descuento')?.errors?.['max']"><Strong>
+                El descuento no puede ser mayor a 100%
+              </Strong>
+            </span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12 d-flex justify-content-center">
+            <button pButton (click)="agregarAlCarrito()">Agregar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-1 mb-2"></div>
+    <div class="col-md-2 mb-5">
+      <div class="row mt-5 border rounded border-primary">
+        <h3 class="text-center mb-4 mt-4">Enviar Orden</h3>
+        <div class="col-md-12 d-flex justify-content-center mb-3">
+          <span class="p-float-label">
+            <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
+              (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true"
+              [ngModelOptions]="{standalone: true}">
+              <ng-template let-c pTemplate="item">
+                <div>{{c.nombre}}</div>
+              </ng-template>
+            </p-autoComplete>
+            <label for="proveedor">Proveedor</label>
+          </span>
+        </div>
+        <div class="col-md-12 d-flex justify-content-center mb-5">
+          <button pButton (click)="GenerarOrden()">Generar orden</button>
         </div>
       </div>
     </div>
@@ -168,6 +165,7 @@
             <th>Observaciones<p-columnFilter type="text" field="observaciones" display="menu"></p-columnFilter>
             </th>
             <th></th>
+            <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-detalle>
@@ -181,6 +179,7 @@
             <td>${{detalle.preciototal}}</td>
             <td>{{detalle.observaciones}}</td>
             <td><button pButton (click)="buscarProductoCarrito(detalle.numeroproducto)">Editar</button></td>
+            <td><button pButton (click)="borrarProductoCarrito(detalle.numeroproducto)">Borrar</button></td>
           </tr>
         </ng-template>
       </p-table>
@@ -211,13 +210,12 @@
         <div class="col-md-5 mb-4">
           <span class="p-float-label">
             <p-autoComplete id="producto" [suggestions]="filtroproductos" [(ngModel)]="producto"
-                  (completeMethod)="filtrarProducto($event)" field="nombre" [dropdown]="true"
-                  formControlName="nombre">
-                  <ng-template let-c pTemplate="item">
-                    <div>{{c.nombre}}</div>
-                  </ng-template>
-                </p-autoComplete>
-                <label for="producto">Seleccione el producto</label>
+              (completeMethod)="filtrarProducto($event)" field="nombre" [dropdown]="true" formControlName="nombre">
+              <ng-template let-c pTemplate="item">
+                <div>{{c.nombre}}</div>
+              </ng-template>
+            </p-autoComplete>
+            <label for="producto">Seleccione el producto</label>
           </span>
           <div *ngIf="this.envio">
             <span class="text-danger" *ngIf="this.formEdicionCarrito.get('nombre')?.errors?.['required']"><Strong>

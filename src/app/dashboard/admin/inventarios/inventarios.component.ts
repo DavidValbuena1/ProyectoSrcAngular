@@ -8,6 +8,9 @@ import { Subscription } from 'rxjs';
 import { ApplicationConfig } from '@angular/platform-browser';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-admin-inventarios',
@@ -72,6 +75,7 @@ export class InventariosAdminComponent implements OnInit {
     this.buscarProveedores();
     this.llenarTallas();
     this.llenarGraficoDeDona();
+
   }
 
   //Metodos para el CRUD y manejo de Datos de productos
@@ -88,8 +92,8 @@ export class InventariosAdminComponent implements OnInit {
       this.fecha = this.producto.date;
       this.nombre = this.producto.nombre;
       this.tallaseleccionada = {
-        talla:this.producto.size
-      }
+        talla: this.producto.size,
+      };
       this.proveedor = this.producto.proveedor;
       this.categoria = this.producto.type;
       this.preciototal = this.producto.precioTotal;
@@ -313,22 +317,26 @@ export class InventariosAdminComponent implements OnInit {
             otros += categoria.quantity;
           }
         }
-        this.data = {
-          labels: [
-            x[0].nombre,
-            x[1].nombre,
-            x[2].nombre,
-            x[3].nombre,
-            x[4].nombre,
-            x[5].nombre,
-            x[6].nombre,
-            x[7].nombre,
-            x[8].nombre,
-            x[9].nombre,
-          ],
-          datasets: [
-            {
-              data: [
+        const ctx:any = document.getElementById('myChart')!;
+        const myChart = new Chart(ctx, {
+          type:'bar',
+          data:{
+            labels: [
+              x[0].nombre,
+              x[1].nombre,
+              x[2].nombre,
+              x[3].nombre,
+              x[4].nombre,
+              x[5].nombre,
+              x[6].nombre,
+              x[7].nombre,
+              x[8].nombre,
+              x[9].nombre,
+            ],
+            datasets: [
+              {
+                label:'Producto',
+                data: [
                 pantalon,
                 jean,
                 camiseta,
@@ -341,32 +349,37 @@ export class InventariosAdminComponent implements OnInit {
                 otros,
               ],
               backgroundColor: [
-                '#42A5F5',
-                '#66BB6A',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
+                'rgba(54, 162, 235)',
+                'rgba(201, 203, 207)',
+                'rgba(255, 99, 132)',
+                'rgba(255, 159, 64)',
+                'rgba(255, 205, 86)',
+                'rgba(75, 192, 192)',
+                'rgba(54, 162, 235)',
+                'rgba(153, 102, 255)',
+                'rgba(201, 203, 207)',
+                'rgba(255, 99, 132)',
               ],
               hoverBackgroundColor: [
-                '#64B5F6',
-                '#81C784',
-                '#FFB74D',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
-                '#FFA726',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(201, 203, 207, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
               ],
+              borderWidth: 1,
             },
-          ],
-        };
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+        }
+        });
       });
     });
   }
@@ -474,5 +487,32 @@ export class InventariosAdminComponent implements OnInit {
         }
       }
     };
+  }
+
+  exportarGrafico() {
+    const doc = new jsPDF();
+
+    const DATA = document.getElementById('grafico')!;
+    const options = {
+      background: 'white',
+      scale: 3,
+    };
+    doc.setFontSize(20);
+    doc.text('Cantidad de productos por categoria', 50, 10);
+    html2canvas(DATA, options)
+      .then((canvas) => {
+        const img = canvas.toDataURL('image/jpeg');
+
+        const bufferX = 35;
+        const bufferY = 30;
+        const imgProps = (doc as any).getImageProperties(img);
+        const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        doc.addImage(img, 'JPEG', bufferX, bufferY, pdfWidth, pdfHeight);
+        return doc;
+      })
+      .then((docResult) => {
+        docResult.save('prueba.pdf');
+      });
   }
 }

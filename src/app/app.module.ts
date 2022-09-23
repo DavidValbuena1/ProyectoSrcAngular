@@ -25,7 +25,10 @@ import {InputNumberModule} from 'primeng/inputnumber';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {MatTableModule} from '@angular/material/table';
+import {TooltipModule} from 'primeng/tooltip';
+import {ToastModule} from 'primeng/toast';
 import { HistorialordenesComponent } from './dashboard/admin/ordenes/historialordenes/historialordenes.component'
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -56,9 +59,11 @@ import { HistorialordenesComponent } from './dashboard/admin/ordenes/historialor
     MultiSelectModule,
     MatTableModule,
     InputNumberModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TooltipModule,
+    ToastModule
   ],
-  providers: [{provide:LocationStrategy, useClass: HashLocationStrategy}],
+  providers: [{provide:LocationStrategy, useClass: HashLocationStrategy},MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
