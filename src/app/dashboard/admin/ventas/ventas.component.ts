@@ -37,6 +37,7 @@ export class VentasAdminComponent implements OnInit {
   cantidad: any;
   precio: any;
   numeroproducto: any = 0;
+  numeroproducto2:any=0;
   descuento: any;
   valortotal: any = 0;
 
@@ -226,6 +227,7 @@ export class VentasAdminComponent implements OnInit {
           this.producto = '';
           this.carrito = [];
           this.valortotal=0;
+          this.buscarProductos();
         });
       });
     });
@@ -233,7 +235,6 @@ export class VentasAdminComponent implements OnInit {
 
 
   buscarProductoCarrito(event:any){
-    this.modalEdicionCarrito=true;
     let detalleorden:any;
     for(let x of this.carrito){
       if(x.numeroproducto == event){
@@ -241,7 +242,13 @@ export class VentasAdminComponent implements OnInit {
       }
     }
 
-
+    this.producto=detalleorden.producto;
+    this.cantidad=detalleorden.cantidad;
+    this.precio=detalleorden.preciounidad;
+    this.descuento=detalleorden.descuento;
+    this.nombreproducto=detalleorden.nombreproducto;
+    this.numeroproducto2=detalleorden.numeroproducto;
+    this.modalEdicionCarrito=true;
   }
 
   borrarProductoCarrito(event:any){
@@ -258,6 +265,59 @@ export class VentasAdminComponent implements OnInit {
     this.valortotal=0;
     for (let x of this.carrito) {
       this.valortotal = this.valortotal + x.preciototal;
+    }
+  }
+
+  actualizarCarrito(){
+    this.envio=true;
+    let carrito2:any=[];
+    if (
+      this.descuento == null ||
+      this.descuento == '' ||
+      this.descuento == undefined
+    ) {
+      this.descuento = 0;
+    }
+    if(this.formEdicionCarrito.valid){
+      if(this.producto.quantity>=this.cantidad){
+        let data: any = {
+          numeroproducto: this.numeroproducto2,
+          cantidad: this.cantidad,
+          preciounidad: this.precio,
+          preciototal:
+            this.precio * this.cantidad -
+            (this.precio * this.cantidad * this.descuento) / 100,
+          nombreproducto: this.nombreproducto,
+          producto: this.producto,
+          descuento: this.descuento,
+        }
+        for(let f of this.carrito){
+          if(this.numeroproducto2 !=f.numeroproducto){
+            carrito2.push(f);
+          }else if(this.numeroproducto2==f.numeroproducto){
+            carrito2.push(data);
+          }
+        }
+        this.carrito=carrito2;
+        this.valortotal = 0;
+        for (let x of this.carrito) {
+          this.valortotal= this.valortotal + x.preciototal;
+        }
+        this.cerrarModalCarrito();
+        this.envio=false;
+      }else{
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            'La cantidad del producto ' +
+            this.producto.nombre +
+            ' es ' +
+            this.cantidad +
+            ' y no puede ser mayor a ' +
+            this.producto.quantity,
+        });
+      }
     }
   }
 
@@ -291,10 +351,23 @@ export class VentasAdminComponent implements OnInit {
       descuento: new FormControl('', [Validators.max(100), Validators.min(0)]),
     });
     this.formEdicionCarrito = new FormGroup({
-      cantidad: new FormControl('', [Validators.required]),
-      preciounidad: new FormControl('', [Validators.required]),
-      nombre: new FormControl('', [Validators.required]),
-      descuento: new FormControl('', [Validators.max(100), Validators.min(1)]),
+      cantidad: new FormControl('', [Validators.required, Validators.min(1)]),
+      preciounidad: new FormControl('', [
+        Validators.required,
+        Validators.min(1),
+      ]),
+      descuento: new FormControl('', [Validators.max(100), Validators.min(0)]),
     });
+  }
+
+
+  //Metodos para manejo de modales
+  cerrarModalCarrito(){
+    this.producto="";
+    this.cantidad="";
+    this.precio="";
+    this.descuento="";
+    this.nombreproducto="";
+    this.modalEdicionCarrito=false;
   }
 }

@@ -29,6 +29,7 @@ import {TooltipModule} from 'primeng/tooltip';
 import {ToastModule} from 'primeng/toast';
 import { HistorialordenesComponent } from './dashboard/admin/ordenes/historialordenes/historialordenes.component'
 import { MessageService } from 'primeng/api';
+import { HistorialventasComponent } from './dashboard/admin/ventas/historialventas/historialventas.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { MessageService } from 'primeng/api';
     VentasAdminComponent,
     OrdenesAdminComponent,
     ProveedoresAdminComponent,
-    HistorialordenesComponent
+    HistorialordenesComponent,
+    HistorialventasComponent
   ],
   imports: [
     BrowserModule,

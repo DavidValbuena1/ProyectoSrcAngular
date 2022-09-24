@@ -146,8 +146,8 @@
   </div>
 </div>
 
-<!-- <div class="container-fluid">
-  <p-dialog [(visible)]="modalEdicionCarrito" [modal]="true" [draggable]="false" [closable]="false"
+<div class="container-fluid">
+  <p-dialog [(visible)]="modalEdicionCarrito" [style]="{width: '40vw'}" [modal]="true" [draggable]="false" [closable]="false"
     [breakpoints]="{'960px': '75vw'}">
     <div class="row">
       <div class="col-md-12 d-flex justify-content-end">
@@ -155,100 +155,84 @@
       </div>
     </div>
     <form [formGroup]="formEdicionCarrito">
-      <div class="row mb-2 mt-3">
-        <h3 class="text-center mb-3">Actualizar datos del producto #{{numeroproducto}} de la orden</h3>
-        <div class="col-md-1"></div>
-        <div class="col-md-5 mb-4">
+      <div class="row mb-2">
+        <h3 class="text-center mb-5">Actualizar datos del producto #{{numeroproducto}} del carrito</h3>
+        <div class="col-md-6 mb-4 d-flex justify-content-center">
           <span class="p-float-label">
-            <p-autoComplete id="producto" [suggestions]="filtroproductos" [(ngModel)]="producto"
-              (completeMethod)="filtrarProducto($event)" field="nombre" [dropdown]="true" formControlName="nombre">
-              <ng-template let-c pTemplate="item">
-                <div>{{c.nombre}}</div>
-              </ng-template>
-            </p-autoComplete>
-            <label for="producto">Seleccione el producto</label>
+          <input id="nombre" pInputText [(ngModel)]="nombreproducto" [disabled]="true"  [ngModelOptions]="{standalone: true}">
+          <label for="nombre">Nombre</label>
+        </span>
+        <div *ngIf="this.envio" class="d-flex align-items-center">
+          <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+            *ngIf="this.nombrebooleantrue"></i>
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+            *ngIf="this.nombrebooleanfalse" pTooltip="Este campo no puede quedar vacío"></i>
+        </div>
+        </div>
+        <div class="col-md-6 mb-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <input id="talla" pInputText [(ngModel)]="cantidad" formControlName="cantidad">
+            <label for="talla">Cantidad</label>
           </span>
-          <div *ngIf="this.envio">
-            <span class="text-danger" *ngIf="this.formEdicionCarrito.get('nombre')?.errors?.['required']"><Strong>
-                El nombre no puede quedar vacío
-              </Strong>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formEdicionCarrito.get('cantidad')?.valid"></i>
+          </div>
+
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formEdicionCarrito.get('cantidad')?.errors?.['required']" pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formEdicionCarrito.get('cantidad')?.errors?.['min']" pTooltip="Este campo no puede ser menor o igual a 0"></i>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <input id="talla" pInputText [(ngModel)]="precio" formControlName="preciounidad">
+            <label for="talla">Precio por unidad</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formEdicionCarrito.get('preciounidad')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+            *ngIf="this.formEdicionCarrito.get('preciounidad')?.errors?.['required']" pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formEdicionCarrito.get('preciounidad')?.errors?.['min']" pTooltip="Este campo no puede ser menor o igual a 0"></i>
+            </div>
+          </div>
+
+
+          <div class="col-md-6 mb-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText type="number" id="descuento" [(ngModel)]="descuento" [min]="0"
+              formControlName="descuento">
+              <label for="descuento">Descuento</label>
             </span>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formEdicionCarrito.get('descuento')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formEdicionCarrito.get('descuento')?.errors?.['max']" pTooltip="Este campo no puede ser mayor a 100"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+            *ngIf="this.formEdicionCarrito.get('descuento')?.errors?.['min']" pTooltip="Este campo no puede ser menor que 0"></i>
           </div>
         </div>
 
-        <div class="col-md-1"></div>
-        <div class="col-md-5 mb-4">
-          <span class="p-float-label">
-            <input id="talla" pInputText [(ngModel)]="talla" formControlName="talla">
-            <label for="talla">Talla</label>
-          </span>
-          <div *ngIf="this.envio">
-            <span class="text-danger" *ngIf="this.formEdicionCarrito.get('talla')?.errors?.['required']"><Strong>
-                La talla no puede quedar vacia
-              </Strong>
-            </span>
-          </div>
+        <div class="col-md-12 mb-3 d-flex justify-content-center">
+          <button class="btn btn-warning" (click)="actualizarCarrito()">Agregar</button>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-5 mb-4">
-          <span class="p-float-label">
-            <input pInputText type="number" id="preciounidad" [min]="0" [(ngModel)]="precioUnidad"
-              formControlName="preciounidad">
-            <label for="preciounidad">Precio por Unidad</label>
-          </span>
-          <div *ngIf="this.envio">
-            <span class="text-danger" *ngIf="this.formEdicionCarrito.get('preciounidad')?.errors?.['required']"><Strong>
-                El precio por unidad no puede quedar vacio
-              </Strong>
-            </span>
-          </div>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-5 mb-4">
-          <span class="p-float-label">
-            <input pInputText type="number" id="cantidad" [(ngModel)]="cantidadproducto" [min]="0"
-              formControlName="cantidad">
-            <label for="cantidad">Cantidad</label>
-          </span>
-          <div *ngIf="this.envio">
-            <span class="text-danger" *ngIf="this.formEdicionCarrito.get('cantidad')?.errors?.['required']"><Strong>
-                La cantidad no puede quedar vacio
-              </Strong>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-5 mb-4">
-          <span class="p-float-label">
-            <input pInputText id="observaciones" [(ngModel)]="observaciones" [ngModelOptions]="{standalone: true}">
-            <label for="observaciones">Observaciones</label>
-          </span>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-5 mb-4">
-          <span class="p-float-label">
-            <input pInputText type="number" id="descuento" [(ngModel)]="descuento" [min]="0"
-              formControlName="descuento">
-            <label for="descuento">Descuento</label>
-          </span>
-          <div *ngIf="this.envio">
-            <span class="text-danger" *ngIf="this.formEdicionCarrito.get('descuento')?.errors?.['max']"><Strong>
-                El descuento no puede ser mayor a 100%
-              </Strong>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="row d-flex justify-content-center mb-3">
-        <div class="col-md-2">
-          <button pButton (click)="actualizarCarrito()">Actualizar</button>
-        </div>
-      </div>
-    </form>
-  </p-dialog>
+      </form>
+    </p-dialog>
 </div>
- -->
+

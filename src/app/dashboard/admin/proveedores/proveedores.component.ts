@@ -3,10 +3,8 @@ import { CategoriaService } from 'src/app/servicios/categoria.service';
 import { ProveedorService } from 'src/app/servicios/proveedor.service';
 import Swal from 'sweetalert2';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-admin-proveedores',
@@ -333,7 +331,7 @@ export class ProveedoresAdminComponent implements OnInit {
 
 
   exportExcel(){
-    this.excelService.descargarExcel(this.listaProveedores);
+    this.excelService.descargarExcelProveedores(this.listaProveedores);
   }
 
   readExcel(event:any){

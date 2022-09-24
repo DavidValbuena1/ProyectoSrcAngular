@@ -15,4 +15,14 @@ export class VentasService {
   obtenerIdMaximo(){
     return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Venta/MaxId");
   }
+
+  obtenerVentas(){
+    return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Venta/listar")
+  }
+  obtenerVentaPorId(data:any){
+    return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Venta/listarId/"+data);
+  }
+  editarVenta(data:any,id:any){
+    return this.http.put("https://proyectosioca.azurewebsites.net/Sioca/Venta/editar/"+id,data);
+  }
 }

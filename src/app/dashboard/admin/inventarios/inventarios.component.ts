@@ -335,7 +335,7 @@ export class InventariosAdminComponent implements OnInit {
             ],
             datasets: [
               {
-                label:'Producto',
+                label:'Cantidad',
                 data: [
                 pantalon,
                 jean,

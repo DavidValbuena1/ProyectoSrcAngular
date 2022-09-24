@@ -3,7 +3,7 @@ import { DetalleordencompraService } from 'src/app/servicios/detalleordencompra.
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import { OrdencompraService } from 'src/app/servicios/ordencompra.service';
 import { ProveedorService } from 'src/app/servicios/proveedor.service';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,7 +17,7 @@ export class OrdenesAdminComponent implements OnInit {
     private ordenService: OrdencompraService,
     private productoService: InventarioService,
     private proveedorService: ProveedorService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.buscarProductos();
@@ -39,8 +39,8 @@ export class OrdenesAdminComponent implements OnInit {
   precioTotal: any = 0;
   observaciones: any;
   descuento: any;
-  numeroproducto:number=0;
-  numeroproducto2:any;
+  numeroproducto: number = 0;
+  numeroproducto2: any;
 
   //Variables para Manejo CRUD OrdenCompra
   idOrden: any;
@@ -57,13 +57,12 @@ export class OrdenesAdminComponent implements OnInit {
   filtroproveedor: any[];
 
   //Variables para manejo de modales
-  modalEdicionCarrito:boolean = false;
+  modalEdicionCarrito: boolean = false;
   //Variables para validacion de inputs
   formBuscar: FormGroup = new FormGroup({});
   formCarrito: FormGroup = new FormGroup({});
   formEdicionCarrito: FormGroup = new FormGroup({});
-  envio:boolean=false;
-
+  envio: boolean = false;
 
   //Metodos para Manejo CRUD
   buscarProductos() {
@@ -99,25 +98,23 @@ export class OrdenesAdminComponent implements OnInit {
             let idorden = x;
             for (let x of this.carrito) {
               x.ordenCompra = {
-                idorden: idorden
-
-              }
+                idorden: idorden,
+              };
             }
             this.detalleordenService
               .enviarCarrito(this.carrito)
               .subscribe((x: any) => {
                 this.ordenService
                   .enviarOrdenAlProveedor(this.carrito)
-                  .subscribe((x: any) => {
-                  });
-                      Swal.fire(
-                        'Operación Exitosa',
-                        'Se genero la orden de compra y fue enviada una copia al proveedor por correo',
-                        'success'
-                      );
-                    this.carrito = [];
-                    this.proveedor = "";
-                    this.precioTotal = "";
+                  .subscribe((x: any) => {});
+                Swal.fire(
+                  'Operación Exitosa',
+                  'Se genero la orden de compra y fue enviada una copia al proveedor por correo',
+                  'success'
+                );
+                this.carrito = [];
+                this.proveedor = '';
+                this.precioTotal = '';
               });
           });
         });
@@ -169,25 +166,22 @@ export class OrdenesAdminComponent implements OnInit {
   }
 
   llenarDatosFormulario(event: any) {
-
-    if (event != "" && event != undefined) {
+    if (event != '' && event != undefined) {
       this.nombreproducto = event.nombre;
       this.talla = event.size;
       this.precioUnidad = event.price;
     } else {
-
       Swal.fire({
         icon: 'error',
         title: '¡Ups!',
-        text: 'Haz dejado el campo producto vacio, vamos a llenarlo'
-      })
+        text: 'Haz dejado el campo producto vacio, vamos a llenarlo',
+      });
     }
   }
 
   agregarAlCarrito() {
-    this.envio=true;
+    this.envio = true;
     if (this.formCarrito.valid) {
-
       if (
         this.observaciones == null ||
         this.observaciones == '' ||
@@ -195,21 +189,25 @@ export class OrdenesAdminComponent implements OnInit {
       ) {
         this.observaciones = 'Ninguna';
       }
-      if( this.descuento == null ||
+      if (
+        this.descuento == null ||
         this.descuento == '' ||
-        this.descuento == undefined){
-          this.descuento=0;
+        this.descuento == undefined
+      ) {
+        this.descuento = 0;
       }
       let data: any = {
-        numeroproducto:this.numeroproducto=this.numeroproducto+1,
+        numeroproducto: (this.numeroproducto = this.numeroproducto + 1),
         nombreproducto: this.nombreproducto,
         talla: this.talla,
         cantidadproducto: this.cantidadproducto,
         preciounidad: this.precioUnidad,
-        preciototal: this.cantidadproducto * this.precioUnidad-((this.cantidadproducto * this.precioUnidad)*this.descuento/100),
+        preciototal:
+          this.cantidadproducto * this.precioUnidad -
+          (this.cantidadproducto * this.precioUnidad * this.descuento) / 100,
         observaciones: this.observaciones,
         descuento: this.descuento,
-        productos: this.producto
+        productos: this.producto,
       };
       this.carrito.push(data);
       this.nombreproducto = '';
@@ -217,8 +215,8 @@ export class OrdenesAdminComponent implements OnInit {
       this.cantidadproducto = '';
       this.precioUnidad = '';
       this.producto = '';
-      this.observaciones='';
-      this.descuento='';
+      this.observaciones = '';
+      this.descuento = '';
       this.ordenCompra = {
         Idorden: 0,
       };
@@ -226,110 +224,144 @@ export class OrdenesAdminComponent implements OnInit {
       for (let x of this.carrito) {
         this.precioTotal = this.precioTotal + x.preciototal;
       }
-    }else{
+      this.envio=false;
+    } else {
       Swal.fire(
         '¡Upss!',
-        'Haz dejado algunos campos obligatorios vacios, ¡Vamos a llenarlos!',
-        'error'
-      )
+        'Algunos campos son invalidos, ¡Vamos a corregirlos!',
+          'warning'
+      );
     }
   }
 
-  buscarProductoCarrito(event:any){
-    this.modalEdicionCarrito=true;
-    let detalleorden:any;
-    for(let x of this.carrito){
-      if(x.numeroproducto == event){
-        detalleorden=x;
+  buscarProductoCarrito(event: any) {
+    this.modalEdicionCarrito = true;
+    let detalleorden: any;
+    for (let x of this.carrito) {
+      if (x.numeroproducto == event) {
+        detalleorden = x;
       }
     }
-      this.talla = detalleorden.talla;
-      this.cantidadproducto = detalleorden.cantidadproducto;
-      this.precioUnidad = detalleorden.preciounidad;
-      this.producto = detalleorden.productos;
-      this.observaciones=detalleorden.observaciones;
-      this.descuento=detalleorden.descuento;
-      this.numeroproducto2=detalleorden.numeroproducto;
-      this.nombreproducto=detalleorden.nombreproducto;
-
+    this.talla = detalleorden.talla;
+    this.cantidadproducto = detalleorden.cantidadproducto;
+    this.precioUnidad = detalleorden.preciounidad;
+    this.producto = detalleorden.productos;
+    this.observaciones = detalleorden.observaciones;
+    this.descuento = detalleorden.descuento;
+    this.numeroproducto2 = detalleorden.numeroproducto;
+    this.nombreproducto = detalleorden.nombreproducto;
   }
 
-  borrarProductoCarrito(event:number){
+  borrarProductoCarrito(event: number) {
     console.log(event);
-    let carritoborrado:any=[];
-    this.numeroproducto=0;
-    for(let y of this.carrito){
-      if(y.numeroproducto!=event){
-        this.numeroproducto=this.numeroproducto+1;
-        y.numeroproducto=this.numeroproducto
+    let carritoborrado: any = [];
+    this.numeroproducto = 0;
+    for (let y of this.carrito) {
+      if (y.numeroproducto != event) {
+        this.numeroproducto = this.numeroproducto + 1;
+        y.numeroproducto = this.numeroproducto;
         carritoborrado.push(y);
       }
     }
     this.carrito = carritoborrado;
-    this.precioTotal=0;
-    for (let x of this.carrito) {
-      this.precioTotal = this.precioTotal + x.preciototal;
-    }
-  }
-  actualizarCarrito(){
-    let carrito2:any=[];
-    let data: any = {
-      numeroproducto:this.numeroproducto2,
-      nombreproducto: this.producto.nombre,
-      talla: this.talla,
-      cantidadproducto: this.cantidadproducto,
-      preciounidad: this.precioUnidad,
-      preciototal: this.cantidadproducto * this.precioUnidad-((this.cantidadproducto * this.precioUnidad)*this.descuento/100),
-      observaciones: this.observaciones,
-      descuento: this.descuento,
-      productos: this.producto
-    };
-    for(let f of this.carrito){
-      if(this.numeroproducto2 !=f.numeroproducto){
-        carrito2.push(f);
-      }else if(this.numeroproducto2==f.numeroproducto){
-        carrito2.push(data);
-      }
-    }
-    this.carrito=carrito2;
     this.precioTotal = 0;
     for (let x of this.carrito) {
       this.precioTotal = this.precioTotal + x.preciototal;
     }
-    this.cerrarModalCarrito();
   }
-  cerrarModalCarrito(){
-    this.modalEdicionCarrito=false;
+  actualizarCarrito() {
+    let carrito2: any = [];
+    this.envio=true;
+    if (this.formEdicionCarrito.valid) {
+      if (
+        this.descuento == null ||
+        this.descuento == '' ||
+        this.descuento == undefined
+      ) {
+        this.descuento = 0;
+      }
+      let data: any = {
+        numeroproducto: this.numeroproducto2,
+        nombreproducto: this.producto.nombre,
+        talla: this.talla,
+        cantidadproducto: this.cantidadproducto,
+        preciounidad: this.precioUnidad,
+        preciototal:
+          this.cantidadproducto * this.precioUnidad -
+          (this.cantidadproducto * this.precioUnidad * this.descuento) / 100,
+        observaciones: this.observaciones,
+        descuento: this.descuento,
+        productos: this.producto,
+      };
+      for (let f of this.carrito) {
+        if (this.numeroproducto2 != f.numeroproducto) {
+          carrito2.push(f);
+        } else if (this.numeroproducto2 == f.numeroproducto) {
+          carrito2.push(data);
+        }
+      }
+      this.carrito = carrito2;
+      this.precioTotal = 0;
+      for (let x of this.carrito) {
+        this.precioTotal = this.precioTotal + x.preciototal;
+      }
+      this.cerrarModalCarrito();
+    } else {
+      this.modalEdicionCarrito=false;
+      Swal.fire({
+        title: '¡Upss!',
+        text: 'Algunos campos son invalidos, ¡Vamos a corregirlos!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '¡Ok!',
+        cancelButtonText: 'Salir',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.modalEdicionCarrito=true;
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          this.cerrarModalCarrito();
+        }
+      });
+    }
+  }
+  cerrarModalCarrito() {
+    this.modalEdicionCarrito = false;
     this.nombreproducto = '';
     this.talla = '';
     this.cantidadproducto = '';
     this.precioUnidad = '';
     this.producto = '';
-    this.observaciones='';
-    this.descuento='';
+    this.observaciones = '';
+    this.descuento = '';
     this.ordenCompra = {
       Idorden: 0,
     };
+    this.envio = false;
   }
 
   //Metodos para validación de formularios
   initForms() {
     this.formBuscar = new FormGroup({
-      producto: new FormControl("", [Validators.required])
-    })
-    this.formCarrito = new FormGroup({
-      cantidad: new FormControl("", [Validators.required]),
-      preciounidad: new FormControl("", [Validators.required]),
-      name: new FormControl("",[Validators.required]),
-      talla: new FormControl("", [Validators.required]),
-      descuento: new FormControl("",[Validators.max(100)])
+      producto: new FormControl('', [Validators.required]),
     });
-    this.formEdicionCarrito  = new FormGroup({
-      cantidad: new FormControl("", [Validators.required]),
-      preciounidad: new FormControl("", [Validators.required]),
-      nombre: new FormControl("",[Validators.required]),
-      talla: new FormControl("", [Validators.required]),
-      descuento: new FormControl("",[Validators.max(100)])
+    this.formCarrito = new FormGroup({
+      cantidad: new FormControl('', [Validators.required]),
+      preciounidad: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      talla: new FormControl('', [Validators.required]),
+      descuento: new FormControl('', [Validators.max(100)]),
+      observaciones: new FormControl('', [Validators.maxLength(255)]),
+    });
+    this.formEdicionCarrito = new FormGroup({
+      cantidad: new FormControl('', [Validators.required]),
+      preciounidad: new FormControl('', [Validators.required]),
+      nombre: new FormControl('', [Validators.required]),
+      talla: new FormControl('', [Validators.required]),
+      descuento: new FormControl('', [Validators.max(100)]),
+      observaciones: new FormControl('', [Validators.maxLength(255)]),
     });
   }
 }
