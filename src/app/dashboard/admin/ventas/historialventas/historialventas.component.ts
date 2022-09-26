@@ -304,4 +304,14 @@ export class HistorialventasComponent implements OnInit {
       }
     };
   }
+
+  generarReporte(){
+    this.ventasService.generarReportePdf().subscribe((x)=>{
+      let download = window.URL.createObjectURL(x);
+      let link = document.createElement("a");
+      link.href=download;
+      link.download="ventas.pdf";
+      link.click();
+    })
+  }
 }

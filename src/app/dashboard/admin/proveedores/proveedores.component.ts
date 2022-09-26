@@ -402,4 +402,14 @@ export class ProveedoresAdminComponent implements OnInit {
       categoria: new FormControl ("",[Validators.required])
     })
   }
+
+  generarReporte(){
+    this.proveedorService.generarReportePdf().subscribe((x)=>{
+      let download = window.URL.createObjectURL(x);
+      let link = document.createElement("a");
+      link.href=download;
+      link.download="proveedor.pdf";
+      link.click();
+    })
+  }
 }

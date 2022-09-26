@@ -17,6 +17,10 @@ export class ProveedorService {
     return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Proveedor/listarId/"+data);
   }
 
+  buscarProveedorPorNombre(data:any){
+    return this.http.post("http://localhost:8880/Sioca/Proveedor/buscarPorNombre",data);
+  }
+
   agregarProveedor(data:any):any{
     return this.http.post("https://proyectosioca.azurewebsites.net/Sioca/Proveedor/agregar",data);
   }
@@ -27,5 +31,9 @@ export class ProveedorService {
 
   eliminarProveedor(data:any):any{
     return this.http.delete("https://proyectosioca.azurewebsites.net/Sioca/Proveedor/eliminar/"+data);
+  }
+
+  generarReportePdf(){
+    return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Proveedor/descargarReporte",{responseType:'blob'});
   }
 }

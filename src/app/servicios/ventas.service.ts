@@ -25,4 +25,8 @@ export class VentasService {
   editarVenta(data:any,id:any){
     return this.http.put("https://proyectosioca.azurewebsites.net/Sioca/Venta/editar/"+id,data);
   }
+
+  generarReportePdf(){
+    return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Venta/descargarReporte",{responseType:'blob'});
+  }
 }

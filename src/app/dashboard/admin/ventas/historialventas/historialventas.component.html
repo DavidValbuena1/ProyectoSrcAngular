@@ -2,6 +2,7 @@
 <div class="container-fluid">
   <div class="row me-1 ms-1">
     <div class="col-md-12">
+      <button type="button" (click)="generarReporte()" icon="pi pi-info-circle">Reporte PDF</button>
       <p-table [value]="listaVentas" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
         [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand"

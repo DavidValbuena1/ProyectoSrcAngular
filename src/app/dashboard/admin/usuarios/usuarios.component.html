@@ -1,0 +1,406 @@
+<p-toast></p-toast>
+<div class="container-fluid">
+  <div class="row me-1 ms-1">
+    <div class="col-md-5 p-4">
+
+      <form [formGroup]="formRegistro">
+        <div class="row border border-success shadow rounded d-flex align-items-center">
+          <h3 class="text-center mt-4" *ngIf="this.tituloRegistro">Creación de un usuario</h3>
+          <h3 class="text-center mt-4" *ngIf="this.tituloActualizacion">Actualización de datos del usuario #{{id}}</h3>
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText id="nombre" [(ngModel)]="nombres" formControlName="nombres">
+              <label for="nombre">Nombres</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('nombres')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('nombres')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText id="apellidos" [(ngModel)]="apellidos" formControlName="apellidos">
+              <label for="apellidos">Apellidos</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('apellidos')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('apellidos')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-autoComplete id="talla" [(ngModel)]="tipodocumento" [suggestions]="filtroTipodocumento"
+                (completeMethod)="filtrarTipos($event)" field="nombre" [dropdown]="true"
+                formControlName="tipodocumento">
+                <ng-template let-c pTemplate="item">
+                  <div>{{c.nombre}}</div>
+                </ng-template>
+              </p-autoComplete>
+              <label for="talla">Tipo de documento</label>
+            </span>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('tipodocumento')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('tipodocumento')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText id="numeroidentificacion" [(ngModel)]="numerodocumento"
+                formControlName="numerodocumento">
+              <label for="numeroidentificacion">Numero de documento</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('numerodocumento')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('numerodocumento')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('numerodocumento')?.errors?.['minlength']"
+                pTooltip="Este campo no puede tener menos de 7 numeros"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('numerodocumento')?.errors?.['maxlength']"
+                pTooltip="Este campo no puede tener mas de 10 numeros"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="fechanacimiento" dateFormat="yy-mm-dd" [maxDate]="minDate"
+                formControlName="fechanacimiento"></p-calendar>
+              <label for="apellidos">Fecha de nacimiento</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('fechanacimiento')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('fechanacimiento')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText id="correo" [(ngModel)]="correo" formControlName="correo">
+              <label for="correo">Correo electronico</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('correo')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('correo')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('correo')?.errors?.['email']" pTooltip="Este campo no es un email"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText id="direccion" [(ngModel)]="direccion" formControlName="direccion">
+              <label for="direccion">Direccion de residencia</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('direccion')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('direccion')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+          </div>
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <input pInputText id="telefono" [(ngModel)]="telefono" formControlName="telefono">
+              <label for="telefono">Telefono</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('telefono')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('telefono')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-autoComplete id="rol" [(ngModel)]="rol" [suggestions]="filtroRoles"
+                (completeMethod)="filtrarRoles($event)" field="nombre" [dropdown]="true" formControlName="rol">
+                <ng-template let-c pTemplate="item">
+                  <div>{{c.nombre}}</div>
+                </ng-template>
+              </p-autoComplete>
+              <label for="rol">Rol</label>
+            </span>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('rol')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('rol')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-password id="contrasena" [(ngModel)]="contrasena" formControlName="contrasena" [toggleMask]="true">
+                <ng-template pTemplate="header">
+                  <h6>Ingresa una contraseña</h6>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                  <p class="mt-2">Requisitos</p>
+                  <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                    <li>Una letra mayúscula</li>
+                    <li>Una letra minúscula</li>
+                    <li>Un número</li>
+                    <li>Minimo 8 caracteres</li>
+                    <li>Máximo 16 caracteres</li>
+                  </ul>
+                </ng-template>
+              </p-password>
+              <label for="contrasena">Contraseña</label>
+            </span>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('contrasena')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('contrasena')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('contrasena')?.errors?.['minlength']"
+                pTooltip="Este campo no puede tener menos de 8 caracteres"></i>
+            </div>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('confirmar')?.errors?.['maxlength']"
+                pTooltip="Este campo no puede tener más de 10 caracteres"></i>
+            </div>
+          </div>
+
+          <div class="col-lg-12 mb-3 mt-4 d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-password id="confirmarcontrasena" [(ngModel)]="confirmar" formControlName="confirmar"
+                [toggleMask]="true">
+              </p-password>
+              <label for="confirmarcontrasena">Confirmar contraseña</label>
+            </span>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('confirmar')?.valid"></i>
+            </div>
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('confirmar')?.errors?.['required']"
+                pTooltip="Este campo no puede quedar vacío"></i>
+            </div>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('confirmar')?.errors?.['minlength']"
+                pTooltip="Este campo no puede tener menos de 8 caracteres"></i>
+            </div>
+
+            <div *ngIf="this.envio" class="d-flex align-items-center">
+              <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+                *ngIf="this.formRegistro.get('confirmar')?.errors?.['maxlength']"
+                pTooltip="Este campo no puede tener más de 10 caracteres"></i>
+            </div>
+          </div>
+          <div class="col-lg-12 mb-3 mt-4 d-flex justify-content-center" *ngIf="this.tituloRegistro">
+            <button class="btn btn-success" (click)="crearUsuario()">Crear Usuario</button>
+          </div>
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center" *ngIf="this.tituloActualizacion">
+            <button pButton class="btn btn-success" (click)="actualizarUsuario()">Actualizar</button>
+          </div>
+          <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center" *ngIf="this.tituloActualizacion">
+            <button pButton class="btn btn-success" (click)="cancelarActualizacion()">Cancelar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-7 p-4 mt-5">
+      <p-table [value]="this.listaUsuarios" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
+        [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand"
+        styleClass="p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+              <i class="pi pi-search"></i>
+              <p-autoComplete field="nombre" [(ngModel)]="buscador" (completeMethod)="filtro(buscador)">
+              </p-autoComplete>
+              <button type="submit" (click)="buscarUsuarios()">Reiniciar</button>
+            </span>
+            <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
+            <input type="file" (change)="readExcel($event)" [(ngModel)]="excel">
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>ID <p-columnFilter type="text" field="id_usuario" display="menu"></p-columnFilter>
+            </th>
+            <th>Nombres<p-columnFilter type="text" field="nombres" display="menu"></p-columnFilter>
+            </th>
+            <th>Apellidos<p-columnFilter type="text" field="apellidos" display="menu"></p-columnFilter>
+            </th>
+            <th>Tipo de documento<p-columnFilter type="text" field="tipoDocumento.nombre" display="menu">
+              </p-columnFilter>
+            </th>
+            <th>Numero documento<p-columnFilter type="text" field="num_Identificacion_usuario" display="menu">
+              </p-columnFilter>
+            </th>
+            <th>Fecha de nacimiento<p-columnFilter type="text" field="fecha" display="menu"></p-columnFilter>
+            </th>
+            <th>Correo Electronico<p-columnFilter type="text" field="correo" display="menu"></p-columnFilter>
+            </th>
+            <th>Dirección de Residencia<p-columnFilter type="text" field="direccion" display="menu"></p-columnFilter>
+            </th>
+            <th>Rol<p-columnFilter type="text" field="rol.nombre" display="menu"></p-columnFilter>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+          <tr>
+            <td>{{usuario.id_usuario}}</td>
+            <td>{{usuario.nombres}}</td>
+            <td>{{usuario.apellidos}}</td>
+            <td>{{usuario.tipoDocumento.nombre}}</td>
+            <td>{{usuario.num_Identificacion_usuario}}</td>
+            <td>{{usuario.fecha}}</td>
+            <td>{{usuario.correo}}</td>
+            <td>{{usuario.direccion}}</td>
+            <td>{{usuario.rol.nombre}}</td>
+            <td class="d-flex">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success ms-2 me-2"
+                (click)="buscarUsuarioPorId(usuario.id_usuario)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                (click)="borrarUsuario(usuario.id_usuario)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Formulario para edición de datos
+<div class="container">
+  <p-dialog [closable]="false" [(visible)]="modalActualizacion" [modal]="true" [draggable]="false"
+    [style]="{width: '50vw',height: '70vw'}">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end">
+        <button (click)="cerrarModalActualizacion()" class="btn btn-outline-dark">X</button>
+      </div>
+    </div>
+    <form class="mt-5">
+      <span class="p-float-label">
+        <p-autoComplete id="categoria" [(ngModel)]="categoria" [suggestions]="filtroCategoria"
+          (completeMethod)="filtrarCategoria($event)" field="nombre" [dropdown]="true"
+          [ngModelOptions]="{standalone: true}">
+          <ng-template let-c pTemplate="item">
+            <div>{{c.nombre}}</div>
+          </ng-template>
+        </p-autoComplete>
+        <label for="categoria">Seleccione la categoria</label>
+      </span><br>
+
+      <span class="p-float-label">
+        <p-autoComplete id="talla" [(ngModel)]="tallaseleccionada" [suggestions]="filtroTalla"
+          (completeMethod)="filtrarTallas($event)" field="talla" [dropdown]="true"
+          [ngModelOptions]="{standalone: true}">
+          <ng-template let-c pTemplate="item">
+            <div>{{c.talla}}</div>
+          </ng-template>
+        </p-autoComplete>
+        <label for="talla">Seleccione la talla</label>
+      </span><br>
+
+
+      <span class="p-float-label">
+        <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
+          (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true"
+          [ngModelOptions]="{standalone: true}">
+          <ng-template let-c pTemplate="item">
+            <div>{{c.nombre}}</div>
+          </ng-template>
+        </p-autoComplete>
+        <label for="proveedor">Seleccione el proveedor</label>
+      </span><br>
+
+      <span class="p-float-label">
+        <input id="nombre" type="text" [(ngModel)]="nombre" pInputText [ngModelOptions]="{standalone: true}">
+        <label for="nombre">Nombre</label>
+      </span>
+      <span class="p-float-label">
+        <input id="referencia" type="text" [(ngModel)]="referencia" pInputText [ngModelOptions]="{standalone: true}">
+        <label for="referencia">Referencia</label>
+      </span>
+      <span class="p-float-label">
+        <input id="cantidad" type="text" [(ngModel)]="cantidad" pInputText [ngModelOptions]="{standalone: true}">
+        <label for="cantidad">Cantidad</label>
+      </span>
+      <span class="p-float-label">
+        <input id="preciounidad" type="text" [(ngModel)]="preciounidad" pInputText
+          [ngModelOptions]="{standalone: true}">
+        <label for="preciounidad">Precio por unidad</label>
+      </span>
+
+
+      <button type="submit" (click)="actualizarProducto()">Enviar</button>
+    </form>
+  </p-dialog>
+</div> -->

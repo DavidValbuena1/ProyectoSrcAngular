@@ -30,7 +30,9 @@ import {ToastModule} from 'primeng/toast';
 import { HistorialordenesComponent } from './dashboard/admin/ordenes/historialordenes/historialordenes.component'
 import { MessageService } from 'primeng/api';
 import { HistorialventasComponent } from './dashboard/admin/ventas/historialventas/historialventas.component';
-
+import { UsuariosComponent } from './dashboard/admin/usuarios/usuarios.component';
+import {CalendarModule} from 'primeng/calendar';
+import {PasswordModule} from 'primeng/password';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +44,8 @@ import { HistorialventasComponent } from './dashboard/admin/ventas/historialvent
     OrdenesAdminComponent,
     ProveedoresAdminComponent,
     HistorialordenesComponent,
-    HistorialventasComponent
+    HistorialventasComponent,
+    UsuariosComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +66,9 @@ import { HistorialventasComponent } from './dashboard/admin/ventas/historialvent
     InputNumberModule,
     ReactiveFormsModule,
     TooltipModule,
-    ToastModule
+    ToastModule,
+    CalendarModule,
+    PasswordModule
   ],
   providers: [{provide:LocationStrategy, useClass: HashLocationStrategy},MessageService],
   bootstrap: [AppComponent]

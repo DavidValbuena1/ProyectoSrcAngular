@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row me-1 ms-1">
     <div class="col-md-7">
-      <button (click)="exportarGrafico()">Prueba1</button>
+      <button (click)="generarReporte()">Reporte PDF</button>
       <button type="button" (click)="abrirmodalRegistro()" icon="pi pi-info-circle">Registrar</button>
       <p-table [value]="this.listaProductos" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
@@ -16,7 +16,7 @@
               <button type="submit" (click)="buscarProductos()">Reiniciar</button>
             </span>
             <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
-            <input type="file" (change)="readExcel($event)">
+            <input type="file" [(ngModel)]="excel"(change)="readExcel($event)">
           </div>
         </ng-template>
         <ng-template pTemplate="header">

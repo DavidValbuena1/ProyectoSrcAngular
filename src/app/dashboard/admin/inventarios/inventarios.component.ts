@@ -6,11 +6,9 @@ import { ProveedorService } from 'src/app/servicios/proveedor.service';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { ApplicationConfig } from '@angular/platform-browser';
-import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import { Chart } from 'chart.js';
+import { ExcelService } from 'src/app/servicios/excel.service';
 
 @Component({
   selector: 'app-admin-inventarios',
@@ -22,7 +20,8 @@ export class InventariosAdminComponent implements OnInit {
     private proveedorService: ProveedorService,
     private primengConfig: PrimeNGConfig,
     private inventarioService: InventarioService,
-    private categoriaService: CategoriaService
+    private categoriaService: CategoriaService,
+    private excelService: ExcelService
   ) {}
 
   //Creando las listas a usar
@@ -75,7 +74,6 @@ export class InventariosAdminComponent implements OnInit {
     this.buscarProveedores();
     this.llenarTallas();
     this.llenarGraficoDeDona();
-
   }
 
   //Metodos para el CRUD y manejo de Datos de productos
@@ -317,10 +315,10 @@ export class InventariosAdminComponent implements OnInit {
             otros += categoria.quantity;
           }
         }
-        const ctx:any = document.getElementById('myChart')!;
+        const ctx: any = document.getElementById('myChart')!;
         const myChart = new Chart(ctx, {
-          type:'bar',
-          data:{
+          type: 'bar',
+          data: {
             labels: [
               x[0].nombre,
               x[1].nombre,
@@ -335,96 +333,57 @@ export class InventariosAdminComponent implements OnInit {
             ],
             datasets: [
               {
-                label:'Cantidad',
+                label: 'Cantidad',
                 data: [
-                pantalon,
-                jean,
-                camiseta,
-                camisa,
-                calzado,
-                tennis,
-                chaqueta,
-                maleta,
-                accesorios,
-                otros,
-              ],
-              backgroundColor: [
-                'rgba(54, 162, 235)',
-                'rgba(201, 203, 207)',
-                'rgba(255, 99, 132)',
-                'rgba(255, 159, 64)',
-                'rgba(255, 205, 86)',
-                'rgba(75, 192, 192)',
-                'rgba(54, 162, 235)',
-                'rgba(153, 102, 255)',
-                'rgba(201, 203, 207)',
-                'rgba(255, 99, 132)',
-              ],
-              hoverBackgroundColor: [
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(201, 203, 207, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(255, 205, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(201, 203, 207, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-              ],
-              borderWidth: 1,
-            },
-          ]
-        },
-        options: {
-          indexAxis: 'y',
-        }
+                  pantalon,
+                  jean,
+                  camiseta,
+                  camisa,
+                  calzado,
+                  tennis,
+                  chaqueta,
+                  maleta,
+                  accesorios,
+                  otros,
+                ],
+                backgroundColor: [
+                  'rgba(54, 162, 235)',
+                  'rgba(201, 203, 207)',
+                  'rgba(255, 99, 132)',
+                  'rgba(255, 159, 64)',
+                  'rgba(255, 205, 86)',
+                  'rgba(75, 192, 192)',
+                  'rgba(54, 162, 235)',
+                  'rgba(153, 102, 255)',
+                  'rgba(201, 203, 207)',
+                  'rgba(255, 99, 132)',
+                ],
+                hoverBackgroundColor: [
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(201, 203, 207, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 205, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(201, 203, 207, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            indexAxis: 'y',
+          },
         });
       });
     });
   }
 
   exportExcel() {
-    let listaFiltro: any[] = [];
-    for (let y of this.listaProductos) {
-      let data: any = {
-        id_producto: y.id_producto,
-        Talla: y.size,
-        Nombre: y.nombre,
-        Reference: y.reference,
-        Quantity: y.quantity,
-        Price: y.price,
-        Type: y.type.nombre,
-        Proveedor: y.proveedor.nombre,
-        Preciototal: y.precioTotal,
-      };
-
-      listaFiltro.push(data);
-    }
-    this.filtroExcel = listaFiltro;
-    console.log(listaFiltro);
-    const worksheet = XLSX.utils.json_to_sheet(listaFiltro);
-    const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-    const excelBuffer: any = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array',
-    });
-    this.saveAsExcelFile(excelBuffer, 'productos');
-  }
-
-  saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE =
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
-    const data: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE,
-    });
-    FileSaver.saveAs(
-      data,
-      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
-    );
-    this.buscarProductos();
-    this.buscador = '';
+    this.excelService.descargarExcelInventario(this.listaProductos);
   }
 
   filtro(event: any) {
@@ -457,62 +416,67 @@ export class InventariosAdminComponent implements OnInit {
       var sheetNames = workBook.SheetNames;
       this.ExcelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
       for (let i of this.ExcelData) {
-        if (i.id != 0 || i.id != '') {
-          let data = {
-            id_producto: i.id_producto,
-            type: {
-              id: i.type,
-            },
-            proveedor: {
-              id_proveedor: i.proveedor,
-            },
-            size: i.size,
-            nombre: i.nombre,
-            reference: i.reference,
-            quantity: i.quantity,
-            price: i.price,
-            precioTotal: i.preciototal,
-            date: new Date(),
-          };
-          console.log(data);
-          this.inventarioService
-            .actualizarProducto(data)
-            .subscribe((x: any) => {
-              console.log('salimos');
+        this.proveedorService
+          .buscarProveedorPorNombre(i.Proveedor)
+          .subscribe((x: any) => {
+            this.categoriaService.buscarCategoriaPorNombre(i.Categoria).subscribe((y:any)=>{
 
-              this.buscarProductos();
-              this.excel = '';
-            });
-        } else {
-        }
+              if (i.ID != 0 && i.ID != '' && i.ID != null && i.ID != undefined) {
+                let data = {
+                  id_producto: i.ID,
+                  type: y,
+                  proveedor:x,
+                  size: i.Talla,
+                  nombre: i.Nombre,
+                  reference: i.Referencia,
+                  quantity: i.Cantidad,
+                  price: i.Precio_por_unidad,
+                  precioTotal: i.Precio_total,
+                  date: i.Fecha_de_entrada,
+                };
+                console.log(data);
+                this.inventarioService
+                  .actualizarProducto(data)
+                  .subscribe((x: any) => {
+                    console.log('salimos');
+
+                    this.buscarProductos();
+                    this.excel = '';
+                  });
+              } else {
+                let data = {
+                  id_producto: 0,
+                  type: y,
+                  proveedor:x,
+                  size: i.Talla,
+                  nombre: i.Nombre,
+                  reference: i.Referencia,
+                  quantity: i.Cantidad,
+                  price: i.Precio_por_unidad,
+                  precioTotal: i.Precio_total,
+                  date: i.Fecha_de_entrada,
+                };
+                this.inventarioService
+                  .actualizarProducto(data)
+                  .subscribe((x: any) => {
+
+                    this.buscarProductos();
+                    this.excel = '';
+                  });
+              }
+            })
+          });
       }
     };
   }
 
-  exportarGrafico() {
-    const doc = new jsPDF();
-
-    const DATA = document.getElementById('grafico')!;
-    const options = {
-      background: 'white',
-      scale: 3,
-    };
-    doc.setFontSize(20);
-    doc.text('Cantidad de productos por categoria', 50, 10);
-    html2canvas(DATA, options)
-      .then((canvas) => {
-        const img = canvas.toDataURL('image/jpeg');
-
-        const bufferX = 35;
-        const bufferY = 30;
-        const imgProps = (doc as any).getImageProperties(img);
-        const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        doc.addImage(img, 'JPEG', bufferX, bufferY, pdfWidth, pdfHeight);
-        return doc;
-      })
-      .then((docResult) => {
-        docResult.save('prueba.pdf');
-      });
+  generarReporte() {
+    this.inventarioService.generarReportePdf().subscribe((x) => {
+      let download = window.URL.createObjectURL(x);
+      let link = document.createElement('a');
+      link.href = download;
+      link.download = 'ventas.pdf';
+      link.click();
+    });
   }
 }

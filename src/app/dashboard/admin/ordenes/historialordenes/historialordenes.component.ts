@@ -224,4 +224,14 @@ export class HistorialordenesComponent implements OnInit {
       proveedor: new FormControl("",[Validators.required])
     })
   }
+
+  generarReporte(){
+    this.ordenService.generarReportePdf().subscribe((x)=>{
+      let download = window.URL.createObjectURL(x);
+      let link = document.createElement("a");
+      link.href=download;
+      link.download="ventas.pdf";
+      link.click();
+    })
+  }
 }

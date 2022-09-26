@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import { VentasService } from 'src/app/servicios/ventas.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { MessageService } from 'primeng/api';
 import { DetalleventaService } from 'src/app/servicios/detalleventa.service';
@@ -211,6 +211,7 @@ export class VentasAdminComponent implements OnInit {
               idventa: {
                 id: idventas,
               },
+              preciounidad:f.preciounidad,
               idproducto: f.producto,
               descuento: f.descuento,
               subtotal: f.preciototal,

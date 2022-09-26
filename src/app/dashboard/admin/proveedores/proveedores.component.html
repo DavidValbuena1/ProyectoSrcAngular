@@ -2,6 +2,7 @@
   <div class="row me-1 ms-1">
     <div class="col-md-12">
       <button type="button" (click)="abrirmodalRegistro()" icon="pi pi-info-circle">Registrar</button>
+      <button type="button" (click)="generarReporte()" icon="pi pi-info-circle">Reporte PDF</button>
       <p-table id="tabla" [value]="this.listaProveedores" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
         [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand"

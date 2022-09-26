@@ -31,4 +31,8 @@ export class OrdencompraService {
   actualizarOrden(data:any){
     return this.http.put("https://proyectosioca.azurewebsites.net/Sioca/OrdenCompra/editar/"+data.idorden,data);
   }
+
+  generarReportePdf(){
+    return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/OrdenCompra/descargarReporte",{responseType:'blob'});
+  }
 }

@@ -5,6 +5,7 @@ import { InventariosAdminComponent } from './dashboard/admin/inventarios/inventa
 import { HistorialordenesComponent } from './dashboard/admin/ordenes/historialordenes/historialordenes.component';
 import { OrdenesAdminComponent } from './dashboard/admin/ordenes/ordenes.component';
 import { ProveedoresAdminComponent } from './dashboard/admin/proveedores/proveedores.component';
+import { UsuariosComponent } from './dashboard/admin/usuarios/usuarios.component';
 import { HistorialventasComponent } from './dashboard/admin/ventas/historialventas/historialventas.component';
 import { VentasAdminComponent } from './dashboard/admin/ventas/ventas.component';
 import { InicioComponent } from './inicio/inicio.component';
@@ -24,7 +25,8 @@ const routes: Routes = [
   {path:"proveedoresAdmin",component:ProveedoresAdminComponent},
   {path:"ventasAdmin",component:VentasAdminComponent},
   {path:"historialordenesAdmin",component:HistorialordenesComponent},
-  {path:"historialventasAdmin",component:HistorialventasComponent}
+  {path:"historialventasAdmin",component:HistorialventasComponent},
+  {path:"usuariosAdmin",component:UsuariosComponent}
 ];
 
 @NgModule({

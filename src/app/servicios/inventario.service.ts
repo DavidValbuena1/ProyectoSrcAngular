@@ -13,7 +13,7 @@ export class InventarioService {
     return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Producto/listar")
   }
 
-  registrarProducto(data:any){ 
+  registrarProducto(data:any){
     return this.http.post("https://proyectosioca.azurewebsites.net/Sioca/Producto/agregar",data)
   }
 
@@ -27,5 +27,9 @@ export class InventarioService {
 
   borrarProducto(data:any):any{
       return this.http.delete("https://proyectosioca.azurewebsites.net/Sioca/Producto/eliminar/"+data)
+  }
+
+  generarReportePdf(){
+    return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Producto/descargarReporte",{responseType:'blob'});
   }
 }

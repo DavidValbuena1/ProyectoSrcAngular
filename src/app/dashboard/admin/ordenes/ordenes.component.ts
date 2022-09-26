@@ -364,4 +364,6 @@ export class OrdenesAdminComponent implements OnInit {
       observaciones: new FormControl('', [Validators.maxLength(255)]),
     });
   }
+
+
 }
