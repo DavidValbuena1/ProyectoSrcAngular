@@ -38,6 +38,9 @@ export class ProveedoresAdminComponent implements OnInit {
   nit: any;
   nombreempresa: any;
   categoria: any;
+  buscador1:any;
+  buscador2:any;
+  buscador3:any;
 
   //Variables para manejo de modales
   modalRegistro: boolean = false;
@@ -51,6 +54,7 @@ export class ProveedoresAdminComponent implements OnInit {
   buscador:any;
   ExcelData:any;
   excel:any;
+  suggestions:any;
 
   buscarProveedores() {
     this.proveedorService.obtenerProveedores().subscribe((x: any) => {
@@ -317,14 +321,65 @@ export class ProveedoresAdminComponent implements OnInit {
     let filtrado: any[] = [];
     let filtro = event;
     for (let x of this.listaProveedores) {
+      let id = x.id_proveedor+""
       if (filtro == '' || filtro == null) {
         this.buscarProveedores();
       } else if (
         x.nombre.toLowerCase().indexOf(filtro.toLowerCase()) == 0 ||
-        filtro.toLowerCase().indexOf(x.id_proveedor) == 0
+        id.startsWith(filtro)==true
       ) {
         filtrado.push(x);
         this.listaProveedores = filtrado;
+        this.suggestions=filtrado;
+      }
+    }
+  }
+
+  filtroId(event:any){
+    let filtrado: any[] = [];
+    let filtro = event;
+    for (let x of this.listaProveedores) {
+      let id = x.id_proveedor+""
+      if (filtro == '' || filtro == null) {
+        this.buscarProveedores();
+      } else if (
+        id.startsWith(filtro)==true
+      ) {
+        filtrado.push(x);
+        this.listaProveedores = filtrado;
+        this.suggestions=filtrado;
+      }
+    }
+  }
+
+  filtroNombre(event:any){
+    let filtrado: any[] = [];
+    let filtro = event;
+    for (let x of this.listaProveedores) {
+      if (filtro == '' || filtro == null) {
+        this.buscarProveedores();
+      } else if (
+        x.nombre.toLowerCase().indexOf(filtro.toLowerCase()) == 0 
+      ) {
+        filtrado.push(x);
+        this.listaProveedores = filtrado;
+        this.suggestions=filtrado;
+      }
+    }
+  }
+
+  filtroCiudad(event:any){
+    let filtrado: any[] = [];
+    let filtro = event;
+    for (let x of this.listaProveedores) {
+      if (filtro == '' || filtro == null) {
+        this.buscarProveedores();
+      } else if (
+        x.ciudad.toLowerCase().indexOf(filtro.toLowerCase()) == 0 
+      ) {
+        filtrado.push(x);
+        this.listaProveedores = filtrado;
+        this.suggestions=filtrado;
       }
     }
   }

@@ -182,7 +182,7 @@ export class ExcelService {
       bold: true,
     };
 
-    headerRow.values = ['ID', 'Valor total', 'Fecha', 'Estado'];
+    headerRow.values = ['ID', 'Valor_total', 'Fecha', 'Estado'];
     sheet.getCell('A1').fill = {
       type: 'pattern',
       pattern: 'solid',

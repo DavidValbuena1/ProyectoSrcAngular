@@ -11,7 +11,7 @@
           <div class="flex">
             <span class="p-input-icon-left ml-auto">
               <i class="pi pi-search"></i>
-              <p-autoComplete field="nombre" [(ngModel)]="buscador" (completeMethod)="filtro(buscador)">
+              <p-autoComplete field="nombre" [(ngModel)]="buscador" placeholder="ID,Nombre,Ciudad" [suggestions]="suggestions" (completeMethod)="filtro(buscador)">
               </p-autoComplete>
               <button type="submit" (click)="buscarProveedores()">Reiniciar</button>
             </span>
@@ -21,9 +21,11 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th>ID <p-columnFilter type="text" field="id_proveedor" display="menu"></p-columnFilter>
+            <th>ID<br><p-autoComplete field="nombre" [(ngModel)]="buscador1" [suggestions]="suggestions" (completeMethod)="filtroId(buscador1)">
+            </p-autoComplete>
             </th>
-            <th>Nombre<p-columnFilter type="text" field="nombre" display="menu"></p-columnFilter>
+            <th>Nombre<br><p-autoComplete field="nombre" [(ngModel)]="buscador2" [suggestions]="suggestions" (completeMethod)="filtroNombre(buscador2)">
+            </p-autoComplete>
             </th>
             <th>Correo principal<p-columnFilter type="text" field="correo1" display="menu"></p-columnFilter>
             </th>
@@ -37,7 +39,7 @@
             </th>
             <th>N.I.T<p-columnFilter type="text" field="nit" display="menu"></p-columnFilter>
             </th>
-            <th>Ciudad<p-columnFilter type="text" field="ciudad" display="menu"></p-columnFilter>
+            <th>Ciudad<br><p-autoComplete field="nombre" [(ngModel)]="buscador3" [suggestions]="suggestions" (completeMethod)="filtroCiudad(buscador3)"></p-autoComplete>
             </th>
             <th></th>
           </tr>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+   import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DetalleventaService } from 'src/app/servicios/detalleventa.service';
@@ -39,6 +39,7 @@ export class HistorialventasComponent implements OnInit {
   venta: any;
   iddetalle: any;
   estado:any;
+  idventa:any;
 
   //Variables para manejo de modales
   modalDetalles: boolean = false;
@@ -49,6 +50,8 @@ export class HistorialventasComponent implements OnInit {
   filtroProducto: any;
   ExcelData:any;
   buscador:any;
+  buscador1:any;
+  buscador2:any;
 
   //Variables para manejo de validaciones
   formParent: FormGroup;
@@ -58,6 +61,9 @@ export class HistorialventasComponent implements OnInit {
   buscarVentas() {
     this.ventasService.obtenerVentas().subscribe((x: any) => {
       this.listaVentas = x;
+      this.buscador="";
+      this.buscador1="";
+      this.buscador2="";
     });
   }
 
@@ -78,6 +84,7 @@ export class HistorialventasComponent implements OnInit {
   verDetalles(event: any) {
     this.detalleService.obtenerDetallesPorVenta(event).subscribe((x: any) => {
       this.listaDetalles = x;
+      this.idventa=event;
       this.modalDetalles = true;
     });
   }
@@ -221,12 +228,45 @@ export class HistorialventasComponent implements OnInit {
     let filtrado: any[] = [];
     let filtro = event;
     for (let x of this.listaVentas) {
+      let id= x.id+"";
+      let valor = x.precio+"";
+      if (filtro == '' || filtro == null) {
+        this.buscarVentas();
+      } else if (
+        id.startsWith(filtro)==true || valor.startsWith(filtro)==true
+      ) {
+        filtrado.push(x);
+        this.listaVentas = filtrado;
+      }
+    }
+  }
+
+  filtroPrecio(event:any){
+    let filtrado: any[] = [];
+    let filtro = event;
+    for (let x of this.listaVentas) {
+      let precio = x.precio+"";
 
       if (filtro == '' || filtro == null) {
         this.buscarVentas();
       } else if (
-        filtro.toLowerCase().indexOf(x.precio) == 0 ||
-        filtro.toLowerCase().indexOf(x.id) == 0
+        precio.startsWith(filtro)==true
+      ) {
+        filtrado.push(x);
+        this.listaVentas = filtrado;
+      }
+    }
+  }
+
+  filtroId(event:any){
+    let filtrado: any[] = [];
+    let filtro = event;
+    for (let x of this.listaVentas) {
+      let id = x.id+"";
+      if (filtro == '' || filtro == null) {
+        this.buscarVentas();
+      } else if (
+        id.startsWith(filtro)==true
       ) {
         filtrado.push(x);
         this.listaVentas = filtrado;

@@ -52,6 +52,8 @@ export class HistorialordenesComponent implements OnInit {
   proveedor: any;
   envio: boolean = false;
   buscador: any;
+  buscador2:any;
+  suggestions:any;
 
   //Variables para manejo de filtros
   filtroProducto: any;
@@ -72,6 +74,7 @@ export class HistorialordenesComponent implements OnInit {
         }
       }
       this.buscador = '';
+      this.buscador2="";
     });
   }
 
@@ -268,20 +271,30 @@ export class HistorialordenesComponent implements OnInit {
     });
   }
 
-  filtro(event: any) {
-    let filtrado: any[] = [];
-    let filtro = event;
-    for (let x of this.listaOrdenes) {
-      console.log(filtro.indexOf(x.idorden));
-      if (
-        filtro.indexOf(x.idorden) == 0 ||
-        filtro.indexOf(x.valortotal) == -1
-      ) {
-        filtrado.push(x);
-      } else {
+  filtroId(event: any) {
+    let filtro = event.query;
+    let listaFiltro:any[]=[];
+    for (let x of this.listaOrdenes) {  
+      let orden =x.idorden+"";
+        if(orden.startsWith(filtro)==true){
+          listaFiltro.push(x)
+        }
       }
-    }
-    this.listaOrdenes = filtrado;
+      this.listaOrdenes = listaFiltro;
+      this.suggestions=listaFiltro;
+  }
+
+  filtrovalortotal(event: any) {
+    let filtro = event.query;
+    let listaFiltro:any[]=[];
+    for (let x of this.listaOrdenes) {  
+      let valor = x.valortotal+"";
+        if(valor.startsWith(filtro)==true){
+          listaFiltro.push(x)
+        }
+      }
+      this.listaOrdenes = listaFiltro;
+      this.suggestions=listaFiltro;
   }
 
   exportExcel() {}

@@ -66,6 +66,8 @@ export class InventariosAdminComponent implements OnInit {
   //Manejo de filtros para excel
   filtroExcel: any[];
   buscador: any;
+  buscador1:any;
+  buscador2:any;
   suggestions: any[];
 
   //Subida de archivos de excel
@@ -86,6 +88,7 @@ export class InventariosAdminComponent implements OnInit {
   buscarProductos() {
     this.inventarioService.obtenerProductos().subscribe((x: any) => {
       this.listaProductos = x;
+      this.buscador="";
     });
   }
 
@@ -398,14 +401,84 @@ export class InventariosAdminComponent implements OnInit {
     let filtrado: any[] = [];
     let filtro = event;
     for (let x of this.listaProductos) {
+      let id = x.id_producto+"";
+      let cantidad = x.quantity+"";
       if (filtro == '' || filtro == null) {
         this.buscarProductos();
       } else if (
         x.nombre.toLowerCase().indexOf(filtro.toLowerCase()) == 0 ||
-        filtro.toLowerCase().indexOf(x.id_producto) == 0
+        id.startsWith(filtro) == true || x.type.nombre.toLowerCase().indexOf(filtro.toLowerCase()) == 0 ||
+        cantidad.startsWith(filtro)==true
       ) {
         filtrado.push(x);
         this.listaProductos = filtrado;
+        this.suggestions=filtrado;
+      }
+    }
+  }
+
+  filtroId(event: any) {
+    let filtrado: any[] = [];
+    let filtro = event.query;
+    for (let x of this.listaProductos) {
+      let id = x.id_producto+"";
+      if (filtro == '' || filtro == null) {
+        this.buscarProductos();
+      } else if (
+        id.startsWith(filtro) == true
+      ) {
+        filtrado.push(x);
+        this.listaProductos = filtrado;
+        this.suggestions=filtrado;
+      }
+    }
+  }
+
+  filtroNombre(event: any) {
+    let filtrado: any[] = [];
+    let filtro = event.query;
+    for (let x of this.listaProductos) {
+      if (filtro == '' || filtro == null) {
+        this.buscarProductos();
+      } else if (
+        x.nombre.toLowerCase().indexOf(filtro.toLowerCase()) == 0
+      ) {
+        filtrado.push(x);
+        this.listaProductos = filtrado;
+        this.suggestions=filtrado;
+      }
+    }
+  }
+
+  filtroCategorias(event: any) {
+    let filtrado: any[] = [];
+    let filtro = event.query;
+    for (let x of this.listaProductos) {
+      if (filtro == '' || filtro == null) {
+        this.buscarProductos();
+      } else if (
+        x.type.nombre.toLowerCase().indexOf(filtro.toLowerCase()) == 0
+      ) {
+        filtrado.push(x);
+        this.listaProductos = filtrado;
+        this.suggestions=filtrado;
+      }
+    }
+  }
+
+  filtroCantidad(event: any) {
+    let filtrado: any[] = [];
+    let filtro = event.query;
+    for (let x of this.listaProductos) {
+      let cantidad= x.quantity+"";
+      if (filtro == '' || filtro == null) {
+        this.buscarProductos();
+      } else if (
+        cantidad.startsWith(filtro)==true
+      ) {
+        filtrado.push(x);
+        this.listaProductos = filtrado;
+        this.suggestions=filtrado;
       }
     }
   }

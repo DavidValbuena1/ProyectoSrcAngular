@@ -8,11 +8,6 @@
         styleClass="p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
         <ng-template pTemplate="caption">
           <div class="flex">
-            <span class="p-input-icon-left ml-auto">
-              <i class="pi pi-search"></i>
-              <input pInputText [(ngModel)]="buscador">
-              <button (click)="filtro(buscador)">Buscar</button>
-            </span>
             <button type="submit" (click)="buscarOrdenes()">Reiniciar</button>
             <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
             <input type="file" (change)="readExcel($event)">
@@ -20,9 +15,11 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th>ID <p-columnFilter type="text" field="idorden" display="menu"></p-columnFilter>
+            <th class="text-center">ID<br><p-autoComplete [(ngModel)]="buscador" [suggestions]="suggestions" [showEmptyMessage]="true" (completeMethod)="filtroId($event)">
+            </p-autoComplete>
             </th>
-            <th>Valor total<p-columnFilter type="text" field="valortotal" display="menu"></p-columnFilter>
+            <th class="text-center">Valor total<br><p-autoComplete [(ngModel)]="buscador2" [suggestions]="suggestions" (completeMethod)="filtrovalortotal($event)">
+            </p-autoComplete>
             </th>
             <th>Fecha<p-columnFilter type="text" field="fecha" display="menu"></p-columnFilter>
             </th>
