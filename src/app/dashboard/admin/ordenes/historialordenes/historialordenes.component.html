@@ -6,18 +6,18 @@
         currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
         [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand"
         styleClass="p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
-        <!-- <ng-template pTemplate="caption">
+        <ng-template pTemplate="caption">
           <div class="flex">
             <span class="p-input-icon-left ml-auto">
               <i class="pi pi-search"></i>
-              <p-autoComplete field="nombre" [(ngModel)]="buscador" (completeMethod)="filtro(buscador)">
-              </p-autoComplete>
-              <button type="submit" (click)="buscarProductos()">Reiniciar</button>
+              <input pInputText [(ngModel)]="buscador">
+              <button (click)="filtro(buscador)">Buscar</button>
             </span>
+            <button type="submit" (click)="buscarOrdenes()">Reiniciar</button>
             <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
             <input type="file" (change)="readExcel($event)">
           </div>
-        </ng-template> -->
+        </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th>ID <p-columnFilter type="text" field="idorden" display="menu"></p-columnFilter>
@@ -72,18 +72,6 @@
           currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
           [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand"
           styleClass="p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
-          <!-- <ng-template pTemplate="caption">
-        <div class="flex">
-          <span class="p-input-icon-left ml-auto">
-            <i class="pi pi-search"></i>
-            <p-autoComplete field="nombre" [(ngModel)]="buscador" (completeMethod)="filtro(buscador)">
-            </p-autoComplete>
-            <button type="submit" (click)="buscarProductos()">Reiniciar</button>
-          </span>
-          <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
-          <input type="file" (change)="readExcel($event)">
-        </div>
-      </ng-template> -->
           <ng-template pTemplate="header">
             <tr>
               <th>ID Detalle<p-columnFilter type="number" field="id" display="menu"></p-columnFilter>
@@ -148,12 +136,20 @@
             </p-autoComplete>
             <label for="categoria">Seleccione el producto</label><br>
           </span>
-          <span class="text-danger" *ngIf="this.formParent.get('nombre')?.errors?.['required']">
-            El nombre no puede quedar vacío
-          </span>
-          <span class="text-danger" *ngIf="this.formParent.get('nombre')?.errors?.['minlength']">
-            Debe tener como mínimo 10 caracteres
-          </span><br>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('nombre')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('nombre')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('nombre')?.errors?.['minlength']"
+              pTooltip="Este campo debe tener minimo 10 caracteres"></i>
+          </div>
         </div>
 
 
@@ -162,9 +158,15 @@
             <p-inputNumber formControlName="cantidad" id="cantidad" [min]="0" [(ngModel)]="cantidad"></p-inputNumber>
             <label for="cantidad">Cantidad</label><br>
           </span>
-          <span class="text-danger" *ngIf="this.formParent.get('cantidad')?.errors?.['required']">
-            La cantidad no puede quedar vacía
-          </span><br>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('cantidad')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('cantidad')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
         </div>
       </div>
 
@@ -176,9 +178,15 @@
             </p-inputNumber>
             <label for="preciounidad">Precio unidad</label>
           </span>
-          <span class="text-danger" *ngIf="this.formParent.get('preciounidad')?.errors?.['required']">
-            El precio por unidad no puede quedar vacío
-          </span><br>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('preciounidad')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('preciounidad')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
         </div>
 
         <div class="col-md-6">
@@ -186,9 +194,15 @@
             <p-inputNumber [min]="0" id="descuento" [(ngModel)]="descuento" formControlName="descuento"></p-inputNumber>
             <label for="descuento">Descuento</label>
           </span>
-          <span class="text-danger" *ngIf="this.formParent.get('descuento')?.errors?.['max']">
-            El descuento no puede ser mayor a 100
-          </span><br>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('nombre')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formParent.get('nombre')?.errors?.['max']"
+              pTooltip="Este campo no puede ser mayor a 100"></i>
+          </div>
         </div>
       </div>
 

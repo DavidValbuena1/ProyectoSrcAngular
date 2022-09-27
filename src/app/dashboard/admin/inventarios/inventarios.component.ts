@@ -9,6 +9,7 @@ import { ApplicationConfig } from '@angular/platform-browser';
 import * as XLSX from 'xlsx';
 import { Chart } from 'chart.js';
 import { ExcelService } from 'src/app/servicios/excel.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-inventarios',
@@ -24,6 +25,7 @@ export class InventariosAdminComponent implements OnInit {
     private excelService: ExcelService
   ) {}
 
+  formRegistro: FormGroup;
   //Creando las listas a usar
   listaProductos: any[] = [];
   listaCategorias: any[];
@@ -31,7 +33,8 @@ export class InventariosAdminComponent implements OnInit {
 
   //Creando variables para manejo de modales
   modalRegistro: boolean = false;
-  modalActualizacion: boolean = false;
+  botonActualizar: boolean = false;
+  botonRegistrar: boolean = true;
 
   //Creando filtros
   filtroCategoria: any[];
@@ -51,6 +54,8 @@ export class InventariosAdminComponent implements OnInit {
   preciototal: any;
   fecha: any;
   id_producto: any;
+  envio: boolean = false;
+  myChart: Chart;
 
   //Manejo de graficos dinamicos
   data: any;
@@ -74,6 +79,7 @@ export class InventariosAdminComponent implements OnInit {
     this.buscarProveedores();
     this.llenarTallas();
     this.llenarGraficoDeDona();
+    this.initForms();
   }
 
   //Metodos para el CRUD y manejo de Datos de productos
@@ -98,7 +104,9 @@ export class InventariosAdminComponent implements OnInit {
       this.preciounidad = this.producto.price;
       this.cantidad = this.producto.quantity;
       this.referencia = this.producto.reference;
-      this.modalActualizacion = true;
+      this.modalRegistro = true;
+      this.botonRegistrar = false;
+      this.botonActualizar = true;
     });
   }
 
@@ -139,48 +147,60 @@ export class InventariosAdminComponent implements OnInit {
   }
 
   registrarProducto() {
-    let data: any = [
-      {
-        id_producto: 0,
-        size: this.tallaseleccionada.talla,
-        nombre: this.nombre,
-        reference: this.referencia,
-        quantity: parseInt(this.cantidad),
-        price: parseInt(this.preciounidad),
-        type: {
-          id: this.categoria.id,
+    this.envio = true;
+    if (this.formRegistro.valid) {
+      let data: any = [
+        {
+          id_producto: 0,
+          size: this.tallaseleccionada.talla,
+          nombre: this.nombre,
+          reference: this.referencia,
+          quantity: parseInt(this.cantidad),
+          price: parseInt(this.preciounidad),
+          type: this.categoria,
+          proveedor: this.proveedor,
+          precioTotal: parseInt(this.cantidad) * parseInt(this.preciounidad),
         },
-        proveedor: {
-          id_proveedor: this.proveedor.id_proveedor,
-        },
-      },
-    ];
-    this.inventarioService.registrarProducto(data).subscribe((x: any) => {
-      this.cerrarModalRegistro();
-      this.ngOnInit();
-    });
+      ];
+      this.inventarioService.registrarProducto(data).subscribe((x: any) => {
+        this.cerrarModalRegistro();
+        Swal.fire(
+          '¡Excelente!',
+          'El producto "' +
+            x[0].nombre +
+            '" fue registrado exitosamente con el ID ' +
+            x[0].id_producto,
+          'success'
+        );
+        this.ngOnInit();
+      });
+    }
   }
 
   actualizarProducto() {
-    let data: any = {
-      id_producto: this.producto.id_producto,
-      size: this.tallaseleccionada.talla,
-      nombre: this.producto.nombre,
-      reference: this.referencia,
-      date: this.producto.date,
-      quantity: parseInt(this.cantidad),
-      price: parseInt(this.preciounidad),
-      type: {
-        id: this.categoria.id,
-      },
-      proveedor: {
-        id_proveedor: this.proveedor.id_proveedor,
-      },
-    };
-    this.inventarioService.actualizarProducto(data).subscribe((x: any) => {
-      this.cerrarModalActualizacion();
-      this.ngOnInit();
-    });
+    this.envio = true;
+    if (this.formRegistro.valid) {
+      let data: any = {
+        id_producto: this.producto.id_producto,
+        size: this.tallaseleccionada.talla,
+        nombre: this.producto.nombre,
+        reference: this.referencia,
+        date: this.producto.date,
+        quantity: parseInt(this.cantidad),
+        price: parseInt(this.preciounidad),
+        type: this.categoria,
+        proveedor: this.proveedor,
+      };
+      this.inventarioService.actualizarProducto(data).subscribe((x: any) => {
+        this.cerrarModalRegistro();
+        Swal.fire(
+          '¡Excelente!',
+          'El producto "'+x.nombre+'" con ID '+x.id_producto+' fue actualizado exitosamente',
+          'success'
+          )
+        this.ngOnInit();
+      });
+    }
   }
 
   //Metodos para el manejo de modal y filtros para categoria, proveedores
@@ -215,29 +235,16 @@ export class InventariosAdminComponent implements OnInit {
   cerrarModalRegistro() {
     this.modalRegistro = false;
     this.categoria = '';
-    this.tallaseleccionada.talla = '';
+    this.tallaseleccionada = '';
     this.nombre = '';
     this.referencia = '';
     this.preciototal = '';
     this.preciounidad = '';
     this.proveedor = '';
     this.cantidad = '';
-  }
-
-  abrirModalActualizacion() {
-    this.modalActualizacion = true;
-  }
-
-  cerrarModalActualizacion() {
-    this.modalActualizacion = false;
-    this.categoria = '';
-    this.tallaseleccionada.talla = '';
-    this.nombre = '';
-    this.referencia = '';
-    this.preciototal = '';
-    this.preciounidad = '';
-    this.proveedor = '';
-    this.cantidad = '';
+    this.botonRegistrar = true;
+    this.botonActualizar = false;
+    this.envio = false;
   }
 
   filtrarCategoria(event: any) {
@@ -279,8 +286,6 @@ export class InventariosAdminComponent implements OnInit {
   //Metodos para el manejo de graficos dinamicos
   llenarGraficoDeDona() {
     this.categoriaService.obtenerCategorias().subscribe((x: any) => {
-      console.log(x);
-
       this.inventarioService.obtenerProductos().subscribe((y: any) => {
         let jean = 0;
         let pantalon = 0;
@@ -315,8 +320,11 @@ export class InventariosAdminComponent implements OnInit {
             otros += categoria.quantity;
           }
         }
-        const ctx: any = document.getElementById('myChart')!;
-        const myChart = new Chart(ctx, {
+        const ctx: any = document.getElementById('graficos');
+        if (this.myChart) {
+          this.myChart.destroy();
+        }
+        this.myChart = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: [
@@ -400,15 +408,12 @@ export class InventariosAdminComponent implements OnInit {
         this.listaProductos = filtrado;
       }
     }
-    console.log(this.listaProductos);
   }
 
   //Lector de excel
   readExcel(event: any) {
     let file = event.target.files[0];
     let fileRead = new FileReader();
-    console.log('Leyendo');
-
     fileRead.readAsBinaryString(file);
 
     fileRead.onload = (e) => {
@@ -419,52 +424,55 @@ export class InventariosAdminComponent implements OnInit {
         this.proveedorService
           .buscarProveedorPorNombre(i.Proveedor)
           .subscribe((x: any) => {
-            this.categoriaService.buscarCategoriaPorNombre(i.Categoria).subscribe((y:any)=>{
-
-              if (i.ID != 0 && i.ID != '' && i.ID != null && i.ID != undefined) {
-                let data = {
-                  id_producto: i.ID,
-                  type: y,
-                  proveedor:x,
-                  size: i.Talla,
-                  nombre: i.Nombre,
-                  reference: i.Referencia,
-                  quantity: i.Cantidad,
-                  price: i.Precio_por_unidad,
-                  precioTotal: i.Precio_total,
-                  date: i.Fecha_de_entrada,
-                };
-                console.log(data);
-                this.inventarioService
-                  .actualizarProducto(data)
-                  .subscribe((x: any) => {
-                    console.log('salimos');
-
-                    this.buscarProductos();
-                    this.excel = '';
-                  });
-              } else {
-                let data = {
-                  id_producto: 0,
-                  type: y,
-                  proveedor:x,
-                  size: i.Talla,
-                  nombre: i.Nombre,
-                  reference: i.Referencia,
-                  quantity: i.Cantidad,
-                  price: i.Precio_por_unidad,
-                  precioTotal: i.Precio_total,
-                  date: i.Fecha_de_entrada,
-                };
-                this.inventarioService
-                  .actualizarProducto(data)
-                  .subscribe((x: any) => {
-
-                    this.buscarProductos();
-                    this.excel = '';
-                  });
-              }
-            })
+            this.categoriaService
+              .buscarCategoriaPorNombre(i.Categoria)
+              .subscribe((y: any) => {
+                if (
+                  i.ID != 0 &&
+                  i.ID != '' &&
+                  i.ID != null &&
+                  i.ID != undefined
+                ) {
+                  let data = {
+                    id_producto: i.ID,
+                    type: y,
+                    proveedor: x,
+                    size: i.Talla,
+                    nombre: i.Nombre,
+                    reference: i.Referencia,
+                    quantity: i.Cantidad,
+                    price: i.Precio_por_unidad,
+                    precioTotal: i.Precio_total,
+                    date: i.Fecha_de_entrada,
+                  };
+                  console.log(data);
+                  this.inventarioService
+                    .actualizarProducto(data)
+                    .subscribe((x: any) => {
+                      this.buscarProductos();
+                      this.excel = '';
+                    });
+                } else {
+                  let data = {
+                    id_producto: 0,
+                    type: y,
+                    proveedor: x,
+                    size: i.Talla,
+                    nombre: i.Nombre,
+                    reference: i.Referencia,
+                    quantity: i.Cantidad,
+                    price: i.Precio_por_unidad,
+                    precioTotal: i.Precio_total,
+                    date: i.Fecha_de_entrada,
+                  };
+                  this.inventarioService
+                    .actualizarProducto(data)
+                    .subscribe((x: any) => {
+                      this.buscarProductos();
+                      this.excel = '';
+                    });
+                }
+              });
           });
       }
     };
@@ -477,6 +485,21 @@ export class InventariosAdminComponent implements OnInit {
       link.href = download;
       link.download = 'ventas.pdf';
       link.click();
+    });
+  }
+
+  initForms() {
+    this.formRegistro = new FormGroup({
+      nombre: new FormControl('', [Validators.required]),
+      categoria: new FormControl('', [Validators.required]),
+      cantidad: new FormControl('', [Validators.required, Validators.min(1)]),
+      referencia: new FormControl('', [Validators.required]),
+      talla: new FormControl('', [Validators.required]),
+      precioporunidad: new FormControl('', [
+        Validators.required,
+        Validators.min(1),
+      ]),
+      proveedor: new FormControl('', [Validators.required]),
     });
   }
 }

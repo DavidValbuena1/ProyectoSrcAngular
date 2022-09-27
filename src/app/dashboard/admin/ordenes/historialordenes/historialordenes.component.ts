@@ -4,6 +4,8 @@ import { DetalleordencompraService } from 'src/app/servicios/detalleordencompra.
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import { OrdencompraService } from 'src/app/servicios/ordencompra.service';
 import { ProveedorService } from 'src/app/servicios/proveedor.service';
+import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-historialordenes',
@@ -17,7 +19,6 @@ export class HistorialordenesComponent implements OnInit {
     private detalleordenService: DetalleordencompraService,
     private proveedorService: ProveedorService
   ) {}
-
 
   ngOnInit(): void {
     this.buscarOrdenes();
@@ -49,10 +50,14 @@ export class HistorialordenesComponent implements OnInit {
   idDetalle: any;
   estado: any;
   proveedor: any;
+  envio: boolean = false;
+  buscador: any;
 
   //Variables para manejo de filtros
   filtroProducto: any;
   filtroproveedor: any;
+  excel: any;
+  ExcelData: any;
 
   //Metodos para manejo CRUD
 
@@ -66,13 +71,13 @@ export class HistorialordenesComponent implements OnInit {
           f.estado = 'Completada';
         }
       }
+      this.buscador = '';
     });
   }
 
   buscarProveedores() {
     this.proveedorService.obtenerProveedores().subscribe((x: any) => {
       this.listaProveedor = x;
-      console.log(x);
     });
   }
   obtenerProductos() {
@@ -101,13 +106,22 @@ export class HistorialordenesComponent implements OnInit {
   }
 
   actualizarEstado() {
-    if(this.formOrden.valid){
+    if (this.formOrden.valid) {
       this.ordencompra.proveedor = this.proveedor;
       this.ordencompra.estado = this.estado;
-      this.ordenService.actualizarOrden(this.ordencompra).subscribe((x: any) => {
-        this.buscarOrdenes();
-        this.modalEdicionEstado = false;
-      });
+      this.ordenService
+        .actualizarOrden(this.ordencompra)
+        .subscribe((x: any) => {
+          this.buscarOrdenes();
+          this.modalEdicionEstado = false;
+          Swal.fire(
+            '¡Excelente!',
+            'La orden de compra con ID ' +
+              x.idorden +
+              ' fue actualizada exitosamente',
+            'success'
+          );
+        });
     }
   }
 
@@ -123,6 +137,7 @@ export class HistorialordenesComponent implements OnInit {
       this.observaciones = x.observaciones;
       this.descuento = x.descuento;
       this.idDetalle = x.id;
+      this.modalDetalles = false;
       this.modalEdicionDetalles = true;
     });
   }
@@ -156,10 +171,28 @@ export class HistorialordenesComponent implements OnInit {
 
               ordencompra.valortotal = valortotal;
               this.ordenService
-              .actualizarOrden(ordencompra)
-              .subscribe((x: any) => {
-                this.buscarOrdenes();
-                this.modalEdicionDetalles = false;
+                .actualizarOrden(ordencompra)
+                .subscribe((y: any) => {
+                  this.buscarOrdenes();
+                  console.log(y);
+
+                  this.modalEdicionDetalles = false;
+                  this.modalDetalles = false;
+                  Swal.fire({
+                    title: '¡Excelente!',
+                    text:
+                      'El detalle "' +
+                      x.nombreproducto +
+                      '" y la Orden de compra con ID ' +
+                      y.idorden +
+                      ' fueron actualizados exitosamente',
+                    icon: 'success',
+                    confirmButtonText: 'Ok!',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.modalDetalles = true;
+                    }
+                  });
                 });
             });
         });
@@ -220,18 +253,77 @@ export class HistorialordenesComponent implements OnInit {
     });
 
     this.formOrden = new FormGroup({
-      estado: new FormControl("",[Validators.required,Validators.max(1)]),
-      proveedor: new FormControl("",[Validators.required])
-    })
+      estado: new FormControl('', [Validators.required, Validators.max(1)]),
+      proveedor: new FormControl('', [Validators.required]),
+    });
   }
 
-  generarReporte(){
-    this.ordenService.generarReportePdf().subscribe((x)=>{
+  generarReporte() {
+    this.ordenService.generarReportePdf().subscribe((x) => {
       let download = window.URL.createObjectURL(x);
-      let link = document.createElement("a");
-      link.href=download;
-      link.download="ventas.pdf";
+      let link = document.createElement('a');
+      link.href = download;
+      link.download = 'ventas.pdf';
       link.click();
-    })
+    });
+  }
+
+  filtro(event: any) {
+    let filtrado: any[] = [];
+    let filtro = event;
+    for (let x of this.listaOrdenes) {
+      console.log(filtro.indexOf(x.idorden));
+      if (
+        filtro.indexOf(x.idorden) == 0 ||
+        filtro.indexOf(x.valortotal) == -1
+      ) {
+        filtrado.push(x);
+      } else {
+      }
+    }
+    this.listaOrdenes = filtrado;
+  }
+
+  exportExcel() {}
+
+  readExcel(event: any) {
+    let file = event.target.files[0];
+    let fileRead = new FileReader();
+    fileRead.readAsBinaryString(file);
+
+    fileRead.onload = (e) => {
+      var workBook = XLSX.read(fileRead.result, { type: 'binary' });
+      var sheetNames = workBook.SheetNames;
+      this.ExcelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
+      for (let i of this.ExcelData) {
+        // if (i.ID != 0 && i.ID != '' && i.ID != null && i.ID != undefined) {
+        //   let data = {
+        //     id_producto: i.ID,
+        //     type: y,
+        //     proveedor: x,
+        //     size: i.Talla,
+        //     nombre: i.Nombre,
+        //     reference: i.Referencia,
+        //     quantity: i.Cantidad,
+        //     price: i.Precio_por_unidad,
+        //     precioTotal: i.Precio_total,
+        //     date: i.Fecha_de_entrada,
+        //   };
+        // } else {
+        //   let data = {
+        //     id_producto: 0,
+        //     type: y,
+        //     proveedor: x,
+        //     size: i.Talla,
+        //     nombre: i.Nombre,
+        //     reference: i.Referencia,
+        //     quantity: i.Cantidad,
+        //     price: i.Precio_por_unidad,
+        //     precioTotal: i.Precio_total,
+        //     date: i.Fecha_de_entrada,
+        //   };
+        // }
+      }
+    };
   }
 }

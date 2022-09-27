@@ -16,7 +16,7 @@
               <button type="submit" (click)="buscarProductos()">Reiniciar</button>
             </span>
             <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
-            <input type="file" [(ngModel)]="excel"(change)="readExcel($event)">
+            <input type="file" [(ngModel)]="excel" (change)="readExcel($event)">
           </div>
         </ng-template>
         <ng-template pTemplate="header">
@@ -67,144 +67,174 @@
       </p-table>
     </div>
     <div class="col-md-5" id="grafico">
-      <canvas id="myChart" height="500"></canvas>
+      <canvas id="graficos" height="500"></canvas>
     </div>
   </div>
 </div>
 
 <!-- Formulario para el registro de productos -->
 <div class="container">
-  <p-dialog [(visible)]="modalRegistro" [modal]="true" [draggable]="false" [style]="{width: '50vw',height: '70vw'}"
-    [closable]="false">
+  <p-dialog [(visible)]="modalRegistro" [modal]="true" [draggable]="false" [style]="{width: '42vw'}"
+    [closable]="false" [breakpoints]="{'960px': '60vw'}">
     <div class="row">
-      <div class="col-12 d-flex justify-content-end">
+      <div class="col-11 d-flex justify-content-center">
+        <h3 *ngIf="this.botonRegistrar">Registro de un producto</h3>
+        <h3 *ngIf="this.botonActualizar">Actualización de un producto</h3>
+      </div>
+      <div class="col-1 d-flex justify-content-end">
         <button (click)="cerrarModalRegistro()" class="btn btn-outline-dark">X</button>
       </div>
     </div>
-    <form class="mt-5">
-      <span class="p-float-label">
-        <p-autoComplete id="categoria" [(ngModel)]="categoria" [suggestions]="filtroCategoria"
-          (completeMethod)="filtrarCategoria($event)" field="nombre" [dropdown]="true"
-          [ngModelOptions]="{standalone: true}">
-          <ng-template let-c pTemplate="item">
-            <div>{{c.nombre}}</div>
-          </ng-template>
-        </p-autoComplete>
-        <label for="categoria">Seleccione la categoria</label>
-      </span><br>
+    <form class="mt-1" [formGroup]="formRegistro">
+      <div class="row">
+        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <input id="nombre" type="text" [(ngModel)]="nombre" pInputText formControlName="nombre">
+            <label for="nombre">Nombre</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('nombre')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('nombre')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <p-autoComplete id="talla" [(ngModel)]="tallaseleccionada" [suggestions]="filtroTalla"
+              (completeMethod)="filtrarTallas($event)" field="talla" [dropdown]="true" formControlName="talla">
+              <ng-template let-c pTemplate="item">
+                <div>{{c.talla}}</div>
+              </ng-template>
+            </p-autoComplete>
+            <label for="talla">Seleccione la talla</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('talla')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('talla')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+        </div>
 
-      <span class="p-float-label">
-        <p-autoComplete id="talla" [(ngModel)]="tallaseleccionada" [suggestions]="filtroTalla"
-          (completeMethod)="filtrarTallas($event)" field="talla" [dropdown]="true"
-          [ngModelOptions]="{standalone: true}">
-          <ng-template let-c pTemplate="item">
-            <div>{{c.talla}}</div>
-          </ng-template>
-        </p-autoComplete>
-        <label for="talla">Seleccione la talla</label>
-      </span><br>
+        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <input id="cantidad" type="text" [(ngModel)]="cantidad" pInputText [min]="1" formControlName="cantidad">
+            <label for="cantidad">Cantidad</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('cantidad')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('cantidad')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('cantidad')?.errors?.['min']"
+              pTooltip="Este campo no puede ser igual o menor a 0"></i>
+          </div>
+        </div>
 
 
-      <span class="p-float-label">
-        <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
-          (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true"
-          [ngModelOptions]="{standalone: true}">
-          <ng-template let-c pTemplate="item">
-            <div>{{c.nombre}}</div>
-          </ng-template>
-        </p-autoComplete>
-        <label for="proveedor">Seleccione el proveedor</label>
-      </span><br>
-
-      <span class="p-float-label">
-        <input id="nombre" type="text" [(ngModel)]="nombre" pInputText [ngModelOptions]="{standalone: true}">
-        <label for="nombre">Nombre</label>
-      </span>
-      <span class="p-float-label">
-        <input id="referencia" type="text" [(ngModel)]="referencia" pInputText [ngModelOptions]="{standalone: true}">
-        <label for="referencia">Referencia</label>
-      </span>
-      <span class="p-float-label">
-        <input id="cantidad" type="text" [(ngModel)]="cantidad" pInputText [ngModelOptions]="{standalone: true}">
-        <label for="cantidad">Cantidad</label>
-      </span>
-      <span class="p-float-label">
-        <input id="preciounidad" type="text" [(ngModel)]="preciounidad" pInputText
-          [ngModelOptions]="{standalone: true}">
-        <label for="preciounidad">Precio por unidad</label>
-      </span>
+        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <p-autoComplete id="categoria" [(ngModel)]="categoria" [suggestions]="filtroCategoria"
+              (completeMethod)="filtrarCategoria($event)" field="nombre" [dropdown]="true" formControlName="categoria">
+              <ng-template let-c pTemplate="item">
+                <div>{{c.nombre}}</div>
+              </ng-template>
+            </p-autoComplete>
+            <label for="categoria">Seleccione la categoria</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('categoria')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('categoria')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+        </div>
 
 
-      <button type="submit" (click)="registrarProducto()">Enviar</button>
-    </form>
-  </p-dialog>
-</div>
+        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <input id="referencia" type="text" [(ngModel)]="referencia" pInputText formControlName="referencia">
+            <label for="referencia">Referencia</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('referencia')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('referencia')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+        </div>
 
 
-<!-- Formulario para edición de datos -->
-<div class="container">
-  <p-dialog [closable]="false" [(visible)]="modalActualizacion" [modal]="true" [draggable]="false"
-    [style]="{width: '50vw',height: '70vw'}">
-    <div class="row">
-      <div class="col-12 d-flex justify-content-end">
-        <button (click)="cerrarModalActualizacion()" class="btn btn-outline-dark">X</button>
+        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
+              (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true" formControlName="proveedor">
+              <ng-template let-c pTemplate="item">
+                <div>{{c.nombre}}</div>
+              </ng-template>
+            </p-autoComplete>
+            <label for="proveedor">Seleccione el proveedor</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('proveedor')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('proveedor')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+        </div>
+
+
+        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
+          <span class="p-float-label">
+            <input id="preciounidad" type="text" [(ngModel)]="preciounidad" [min]="1" pInputText
+              formControlName="precioporunidad">
+            <label for="preciounidad">Precio por unidad</label>
+          </span>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('precioporunidad')?.valid"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('precioporunidad')?.errors?.['required']"
+              pTooltip="Este campo no puede quedar vacío"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('precioporunidad')?.errors?.['min']"
+              pTooltip="Este campo no puede ser menor o igual a 0"></i>
+          </div>
+        </div>
+
+
+        <div class="col-lg-12 mt-4 d-flex justify-content-center">
+          <button type="submit" *ngIf="this.botonRegistrar" pButton (click)="registrarProducto()">Enviar</button>
+          <button type="submit" *ngIf="this.botonActualizar" pButton (click)="actualizarProducto()">Actualizar</button>
+        </div>
       </div>
-    </div>
-    <form class="mt-5">
-      <span class="p-float-label">
-        <p-autoComplete id="categoria" [(ngModel)]="categoria" [suggestions]="filtroCategoria"
-          (completeMethod)="filtrarCategoria($event)" field="nombre" [dropdown]="true"
-          [ngModelOptions]="{standalone: true}">
-          <ng-template let-c pTemplate="item">
-            <div>{{c.nombre}}</div>
-          </ng-template>
-        </p-autoComplete>
-        <label for="categoria">Seleccione la categoria</label>
-      </span><br>
 
-      <span class="p-float-label">
-        <p-autoComplete id="talla" [(ngModel)]="tallaseleccionada" [suggestions]="filtroTalla"
-          (completeMethod)="filtrarTallas($event)" field="talla" [dropdown]="true"
-          [ngModelOptions]="{standalone: true}">
-          <ng-template let-c pTemplate="item">
-            <div>{{c.talla}}</div>
-          </ng-template>
-        </p-autoComplete>
-        <label for="talla">Seleccione la talla</label>
-      </span><br>
-
-
-      <span class="p-float-label">
-        <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
-          (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true"
-          [ngModelOptions]="{standalone: true}">
-          <ng-template let-c pTemplate="item">
-            <div>{{c.nombre}}</div>
-          </ng-template>
-        </p-autoComplete>
-        <label for="proveedor">Seleccione el proveedor</label>
-      </span><br>
-
-      <span class="p-float-label">
-        <input id="nombre" type="text" [(ngModel)]="nombre" pInputText [ngModelOptions]="{standalone: true}">
-        <label for="nombre">Nombre</label>
-      </span>
-      <span class="p-float-label">
-        <input id="referencia" type="text" [(ngModel)]="referencia" pInputText [ngModelOptions]="{standalone: true}">
-        <label for="referencia">Referencia</label>
-      </span>
-      <span class="p-float-label">
-        <input id="cantidad" type="text" [(ngModel)]="cantidad" pInputText [ngModelOptions]="{standalone: true}">
-        <label for="cantidad">Cantidad</label>
-      </span>
-      <span class="p-float-label">
-        <input id="preciounidad" type="text" [(ngModel)]="preciounidad" pInputText
-          [ngModelOptions]="{standalone: true}">
-        <label for="preciounidad">Precio por unidad</label>
-      </span>
-
-
-      <button type="submit" (click)="actualizarProducto()">Enviar</button>
     </form>
   </p-dialog>
 </div>
