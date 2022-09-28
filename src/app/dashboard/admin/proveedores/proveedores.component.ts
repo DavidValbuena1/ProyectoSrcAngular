@@ -434,14 +434,14 @@ export class ProveedoresAdminComponent implements OnInit {
           }
           lista.push(data);
           this.proveedorService.agregarProveedor(data).subscribe((x:any)=>{
-            this.buscarProveedores();
-            this.excel="";
           })
 
         })
 
       }
     };
+    this.buscarProveedores();
+            this.excel="";
   }
 
   initForms(){

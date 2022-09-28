@@ -18,7 +18,7 @@ export class ProveedorService {
   }
 
   buscarProveedorPorNombre(data:any){
-    return this.http.post("http://localhost:8880/Sioca/Proveedor/buscarPorNombre",data);
+    return this.http.post("https://proyectosioca.azurewebsites.net/Sioca/Proveedor/buscarPorNombre",data);
   }
 
   agregarProveedor(data:any):any{

@@ -15,7 +15,7 @@ export class ExcelService {
     await this.formatoTablaProveedor(dataExcel);
     this.workbook.xlsx.writeBuffer().then((x) => {
       const blob = new Blob([x]);
-      fs.saveAs(blob, 'Prueba1.xlsx');
+      fs.saveAs(blob, 'Lista_Proveedores_Fecha'+new Date().toLocaleDateString()+'.xlsx');
     });
   }
 
@@ -163,7 +163,7 @@ export class ExcelService {
     await this.formatoTablaVentas(dataExcel);
     this.workbook.xlsx.writeBuffer().then((x) => {
       const blob = new Blob([x]);
-      fs.saveAs(blob, 'Venta_Fecha:' + new Date() + '.xlsx');
+      fs.saveAs(blob, 'Venta_Fecha:' + new Date().toLocaleDateString() + '.xlsx');
     });
   }
 
@@ -313,7 +313,7 @@ export class ExcelService {
     await this.formatoTablaUsuarios(dataExcel);
     this.workbook.xlsx.writeBuffer().then((x) => {
       const blob = new Blob([x]);
-      fs.saveAs(blob, 'Lista_Usuarios_Fecha:' + new Date() + '.xlsx');
+      fs.saveAs(blob, 'Lista_Usuarios_Fecha:' + new Date().toLocaleDateString() + '.xlsx');
     });
   }
 
@@ -633,7 +633,7 @@ export class ExcelService {
     await this.formatoTablaInventario(dataExcel);
     this.workbook.xlsx.writeBuffer().then((x) => {
       const blob = new Blob([x]);
-      fs.saveAs(blob, 'Lista_Productos_Fecha:' + new Date() + '.xlsx');
+      fs.saveAs(blob, 'Lista_Productos_Fecha:' + new Date().toLocaleDateString() + '.xlsx');
     });
   }
 
@@ -938,6 +938,213 @@ export class ExcelService {
           fgColor: { argb: 'FFFFFF' },
         };
         sheet.getCell('J' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      }
+    }
+  }
+
+  async descargarExcelOrdenes(dataExcel: any): Promise<void> {
+    this.workbook = new Workbook();
+    await this.formatoTablaOrdenes(dataExcel);
+    this.workbook.xlsx.writeBuffer().then((x) => {
+      const blob = new Blob([x]);
+      fs.saveAs(blob, 'Lista_Ordenes_Fecha:' + new Date().toLocaleDateString() + '.xlsx');
+    });
+  }
+
+  async formatoTablaOrdenes(data: any[]): Promise<void> {
+    const sheet = this.workbook.addWorksheet('Lista de ordenes');
+    sheet.getColumn('A').width = 6;
+    sheet.getColumn('B').width = 30;
+    sheet.getColumn('C').width = 30;
+    sheet.getColumn('D').width = 30;
+    sheet.getColumn('E').width = 30;
+    sheet.getColumn('F').width = 50;
+
+    const headerRow = sheet.getRow(1);
+    headerRow.font = {
+      color: { argb: 'FFFFFF' },
+      name: 'Times New Roman',
+      size: 14,
+      bold: true,
+    };
+
+    headerRow.values = ['ID', 'Valor_total', 'Fecha', 'Estado','Proveedor','Correo_proveedor'];
+    sheet.getCell('A1').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '4E90BC' },
+    };
+    sheet.getCell('B1').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '4E90BC' },
+    };
+    sheet.getCell('C1').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '4E90BC' },
+    };
+    sheet.getCell('D1').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '4E90BC' },
+    };
+    sheet.getCell('E1').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '4E90BC' },
+    };
+
+    sheet.getCell('F1').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '4E90BC' },
+    };
+
+
+    const filas = sheet.getRows(2, data.length)!;
+
+    for (let index = 0; index < filas.length; index++) {
+      const item = data[index];
+      const row = filas[index];
+      row.values = [item.idorden, item.valortotal, item.fecha, item.estado,item.proveedor.nombre,item.proveedor.correo1];
+      if ((index + 2) % 2 == 0) {
+        let valor: string = '' + (index + 2);
+        sheet.getCell('A' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('A' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'D2E3EE' },
+        };
+        sheet.getCell('B' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('B' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'D2E3EE' },
+        };
+        sheet.getCell('C' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('C' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'D2E3EE' },
+        };
+        sheet.getCell('D' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('D' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'D2E3EE' },
+        };
+        sheet.getCell('E' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('E' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'D2E3EE' },
+        };
+        sheet.getCell('F' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('F' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'D2E3EE' },
+        };
+
+      } else {
+        let valor: string = '' + (index + 2);
+        sheet.getCell('A' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFFF' },
+        };
+        sheet.getCell('A' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('B' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFFF' },
+        };
+        sheet.getCell('B' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('C' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFFF' },
+        };
+        sheet.getCell('C' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('D' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFFF' },
+        };
+        sheet.getCell('D' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('E' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFFF' },
+        };
+        sheet.getCell('E' + valor).border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        sheet.getCell('F' + valor).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFFF' },
+        };
+        sheet.getCell('F' + valor).border = {
           top: { style: 'thin' },
           left: { style: 'thin' },
           bottom: { style: 'thin' },

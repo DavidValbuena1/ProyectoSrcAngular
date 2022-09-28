@@ -1,23 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { DetalleordencompraService } from 'src/app/servicios/detalleordencompra.service';
-import { InventarioService } from 'src/app/servicios/inventario.service';
-import { OrdencompraService } from 'src/app/servicios/ordencompra.service';
-import { ProveedorService } from 'src/app/servicios/proveedor.service';
-import Swal from 'sweetalert2';
-import * as XLSX from 'xlsx';
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormControl, FormArray, Validators } from "@angular/forms";
+import { DetalleordencompraService } from "src/app/servicios/detalleordencompra.service";
+import { ExcelService } from "src/app/servicios/excel.service";
+import { InventarioService } from "src/app/servicios/inventario.service";
+import { OrdencompraService } from "src/app/servicios/ordencompra.service";
+import { ProveedorService } from "src/app/servicios/proveedor.service";
+import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
 
 @Component({
-  selector: 'app-historialordenes',
-  templateUrl: './historialordenes.component.html',
-  styleUrls: ['./historialordenes.component.css'],
+  selector: "app-historialordenes",
+  templateUrl: "./historialordenes.component.html",
+  styleUrls: ["./historialordenes.component.css"],
 })
 export class HistorialordenesComponent implements OnInit {
   constructor(
     private inventarioService: InventarioService,
     private ordenService: OrdencompraService,
     private detalleordenService: DetalleordencompraService,
-    private proveedorService: ProveedorService
+    private proveedorService: ProveedorService,
+    private excelService: ExcelService
   ) {}
 
   ngOnInit(): void {
@@ -45,15 +47,15 @@ export class HistorialordenesComponent implements OnInit {
   preciounidad: any;
   preciototal: any;
   descuento: any = 0;
-  observaciones: any = 'Ninguna';
+  observaciones: any = "Ninguna";
   ordencompra: any;
   idDetalle: any;
   estado: any;
   proveedor: any;
   envio: boolean = false;
   buscador: any;
-  buscador2:any;
-  suggestions:any;
+  buscador2: any;
+  suggestions: any;
 
   //Variables para manejo de filtros
   filtroProducto: any;
@@ -68,13 +70,13 @@ export class HistorialordenesComponent implements OnInit {
       this.listaOrdenes = x;
       for (let f of this.listaOrdenes) {
         if (f.estado == 0) {
-          f.estado = 'En proceso';
+          f.estado = "En proceso";
         } else {
-          f.estado = 'Completada';
+          f.estado = "Completada";
         }
       }
-      this.buscador = '';
-      this.buscador2="";
+      this.buscador = "";
+      this.buscador2 = "";
     });
   }
 
@@ -118,11 +120,11 @@ export class HistorialordenesComponent implements OnInit {
           this.buscarOrdenes();
           this.modalEdicionEstado = false;
           Swal.fire(
-            '¡Excelente!',
-            'La orden de compra con ID ' +
+            "¡Excelente!",
+            "La orden de compra con ID " +
               x.idorden +
-              ' fue actualizada exitosamente',
-            'success'
+              " fue actualizada exitosamente",
+            "success"
           );
         });
     }
@@ -182,15 +184,15 @@ export class HistorialordenesComponent implements OnInit {
                   this.modalEdicionDetalles = false;
                   this.modalDetalles = false;
                   Swal.fire({
-                    title: '¡Excelente!',
+                    title: "¡Excelente!",
                     text:
                       'El detalle "' +
                       x.nombreproducto +
                       '" y la Orden de compra con ID ' +
                       y.idorden +
-                      ' fueron actualizados exitosamente',
-                    icon: 'success',
-                    confirmButtonText: 'Ok!',
+                      " fueron actualizados exitosamente",
+                    icon: "success",
+                    confirmButtonText: "Ok!",
                   }).then((result) => {
                     if (result.isConfirmed) {
                       this.modalDetalles = true;
@@ -246,58 +248,60 @@ export class HistorialordenesComponent implements OnInit {
   //Metodos para validar campos
   initFormParent(): void {
     this.formParent = new FormGroup({
-      nombre: new FormControl('', [
+      nombre: new FormControl("", [
         Validators.required,
         Validators.minLength(10),
       ]),
-      cantidad: new FormControl('', [Validators.required]),
-      preciounidad: new FormControl('', [Validators.required]),
-      descuento: new FormControl('', [Validators.max(100)]),
+      cantidad: new FormControl("", [Validators.required]),
+      preciounidad: new FormControl("", [Validators.required]),
+      descuento: new FormControl("", [Validators.max(100)]),
     });
 
     this.formOrden = new FormGroup({
-      estado: new FormControl('', [Validators.required, Validators.max(1)]),
-      proveedor: new FormControl('', [Validators.required]),
+      estado: new FormControl("", [Validators.required, Validators.max(1)]),
+      proveedor: new FormControl("", [Validators.required]),
     });
   }
 
   generarReporte() {
     this.ordenService.generarReportePdf().subscribe((x) => {
       let download = window.URL.createObjectURL(x);
-      let link = document.createElement('a');
+      let link = document.createElement("a");
       link.href = download;
-      link.download = 'ventas.pdf';
+      link.download = "ventas.pdf";
       link.click();
     });
   }
 
   filtroId(event: any) {
     let filtro = event.query;
-    let listaFiltro:any[]=[];
-    for (let x of this.listaOrdenes) {  
-      let orden =x.idorden+"";
-        if(orden.startsWith(filtro)==true){
-          listaFiltro.push(x)
-        }
+    let listaFiltro: any[] = [];
+    for (let x of this.listaOrdenes) {
+      let orden = x.idorden + "";
+      if (orden.startsWith(filtro) == true) {
+        listaFiltro.push(x);
       }
-      this.listaOrdenes = listaFiltro;
-      this.suggestions=listaFiltro;
+    }
+    this.listaOrdenes = listaFiltro;
+    this.suggestions = listaFiltro;
   }
 
   filtrovalortotal(event: any) {
     let filtro = event.query;
-    let listaFiltro:any[]=[];
-    for (let x of this.listaOrdenes) {  
-      let valor = x.valortotal+"";
-        if(valor.startsWith(filtro)==true){
-          listaFiltro.push(x)
-        }
+    let listaFiltro: any[] = [];
+    for (let x of this.listaOrdenes) {
+      let valor = x.valortotal + "";
+      if (valor.startsWith(filtro) == true) {
+        listaFiltro.push(x);
       }
-      this.listaOrdenes = listaFiltro;
-      this.suggestions=listaFiltro;
+    }
+    this.listaOrdenes = listaFiltro;
+    this.suggestions = listaFiltro;
   }
 
-  exportExcel() {}
+  exportExcel() {
+    this.excelService.descargarExcelOrdenes(this.listaOrdenes);
+  }
 
   readExcel(event: any) {
     let file = event.target.files[0];
@@ -305,37 +309,41 @@ export class HistorialordenesComponent implements OnInit {
     fileRead.readAsBinaryString(file);
 
     fileRead.onload = (e) => {
-      var workBook = XLSX.read(fileRead.result, { type: 'binary' });
+      var workBook = XLSX.read(fileRead.result, { type: "binary" });
       var sheetNames = workBook.SheetNames;
       this.ExcelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
+      let data: any = "";
       for (let i of this.ExcelData) {
-        // if (i.ID != 0 && i.ID != '' && i.ID != null && i.ID != undefined) {
-        //   let data = {
-        //     id_producto: i.ID,
-        //     type: y,
-        //     proveedor: x,
-        //     size: i.Talla,
-        //     nombre: i.Nombre,
-        //     reference: i.Referencia,
-        //     quantity: i.Cantidad,
-        //     price: i.Precio_por_unidad,
-        //     precioTotal: i.Precio_total,
-        //     date: i.Fecha_de_entrada,
-        //   };
-        // } else {
-        //   let data = {
-        //     id_producto: 0,
-        //     type: y,
-        //     proveedor: x,
-        //     size: i.Talla,
-        //     nombre: i.Nombre,
-        //     reference: i.Referencia,
-        //     quantity: i.Cantidad,
-        //     price: i.Precio_por_unidad,
-        //     precioTotal: i.Precio_total,
-        //     date: i.Fecha_de_entrada,
-        //   };
-        // }
+        this.proveedorService
+          .buscarProveedorPorNombre(i.Proveedor)
+          .subscribe((x: any) => {
+            if (i.Estado == "En proceso") {
+              i.Estado = 0;
+            } else if (i.Estado == "Completada") {
+              i.Estado = 1;
+            }
+            if (i.ID != 0 && i.ID != "" && i.ID != null && i.ID != undefined) {
+              data = {
+                idorden: i.ID,
+                proveedor: x,
+                estado: i.Estado,
+                fecha: i.Fecha,
+                valortotal: i.Valor_total,
+              };
+            } else {
+              data = {
+                idorden: 0,
+                proveedor: x,
+                estado: i.Estado,
+                fecha: i.Fecha,
+                valortotal: i.Valor_total,
+              };
+            }
+            this.ordenService.actualizarOrden(data).subscribe((x: any) => {
+              this.buscarOrdenes();
+              this.excel = "";
+            });
+          });
       }
     };
   }
