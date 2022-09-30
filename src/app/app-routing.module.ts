@@ -8,6 +8,7 @@ import { ProveedoresAdminComponent } from './dashboard/admin/proveedores/proveed
 import { UsuariosComponent } from './dashboard/admin/usuarios/usuarios.component';
 import { HistorialventasComponent } from './dashboard/admin/ventas/historialventas/historialventas.component';
 import { VentasAdminComponent } from './dashboard/admin/ventas/ventas.component';
+import { VendedorComponent } from './dashboard/vendedor/vendedor.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { LoginComponent } from './login/login.component';
 
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path:"login",component:LoginComponent},
 // Dashboards
   {path:"administrador",component:AdminComponent},
+  {path:"vendedor",component:VendedorComponent},
 
 
   // Modulos administrador

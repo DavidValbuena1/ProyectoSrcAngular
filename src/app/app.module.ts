@@ -33,6 +33,7 @@ import { HistorialventasComponent } from './dashboard/admin/ventas/historialvent
 import { UsuariosComponent } from './dashboard/admin/usuarios/usuarios.component';
 import {CalendarModule} from 'primeng/calendar';
 import {PasswordModule} from 'primeng/password';
+import { VendedorComponent } from './dashboard/vendedor/vendedor.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +46,8 @@ import {PasswordModule} from 'primeng/password';
     ProveedoresAdminComponent,
     HistorialordenesComponent,
     HistorialventasComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    VendedorComponent
   ],
   imports: [
     BrowserModule,

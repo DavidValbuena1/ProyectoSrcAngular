@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailValidator } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 import { UsuarioService } from '../servicios/usuario.service';
 
 @Component({
@@ -22,16 +23,15 @@ export class LoginComponent implements OnInit {
       correo:this.email,
       contraseña:this.password
     }
-
     this.usuarioservice.verificarUsuario(data).subscribe((x:any)=>{
-      console.log(x);
       localStorage.setItem("usuarioConectado","");
+      console.log(x);
 
-      localStorage.setItem("usuarioConectado",JSON.stringify(x));
+      localStorage.setItem("usuarioConectado",x.rol.id);
+      localStorage.setItem("usuarioNombre",x.nombres + " " + x.apellidos);
 
 
       try{
-
         if(x.rol.id == 1){
           this.router.navigate(['administrador']);
         }
@@ -39,10 +39,12 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['vendedor']);
         }
         }catch(err){
-          alert("EL USUARIO NO EXISTE");
-
+          Swal.fire(
+            '¡Upss!',
+            'El correo y la contraseña no coinciden',
+            'error'
+          )
         }
-
     })
   }
 }
