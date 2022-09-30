@@ -1,0 +1,79 @@
+.button {
+    width: 200px;
+    height: 45px;
+    background: #ADADAD;
+    border-radius: 8px;
+    border: 2px solid #ADADAD;
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFF;
+    -webkit-transition: 0.5s all ease;
+    transition: 0.5s all ease;
+    position: relative;
+    overflow: hidden;
+    padding: 10px 25px;
+    z-index: 1;
+}
+
+.button:before {
+    width: 50%;
+    height: 100%;
+    content: "";
+    margin: auto;
+    position: absolute;
+    top: 0%;
+    left: -50%;
+    background: #334b79;
+    transition: all 0.5s ease;
+    z-index: -1;
+}
+
+.button:after {
+    width: 50%;
+    height: 100%;
+    content: "";
+    margin: auto;
+    position: absolute;
+    top: 0%;
+    left: 100%;
+    background: #334b79;
+    transition: all 0.5s ease;
+    z-index: -1;
+}
+
+.button:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.button:hover:before {
+    top: 0;
+    left: 0;
+}
+
+.button:hover:after {
+    top: 0;
+    left: 50%;
+}
+
+.fondo {
+    background: url(../../assets/fondoinicio.jpg);
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+}
+
+.fondo2 {
+    background: transparent;
+}
+
+.texto{
+    font-size: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    color: white;
+}
+
+.texto2{
+    font-size:80px;
+}

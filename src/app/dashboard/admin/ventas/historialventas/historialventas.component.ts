@@ -40,6 +40,7 @@ export class HistorialventasComponent implements OnInit {
   iddetalle: any;
   estado:any;
   idventa:any;
+  excel:any;
 
   //Variables para manejo de modales
   modalDetalles: boolean = false;
@@ -52,6 +53,7 @@ export class HistorialventasComponent implements OnInit {
   buscador:any;
   buscador1:any;
   buscador2:any;
+  suggestions:any;
 
   //Variables para manejo de validaciones
   formParent: FormGroup;
@@ -63,7 +65,7 @@ export class HistorialventasComponent implements OnInit {
       this.listaVentas = x;
       this.buscador="";
       this.buscador1="";
-      this.buscador2="";
+      this.buscador2="";   
     });
   }
 
@@ -165,7 +167,6 @@ export class HistorialventasComponent implements OnInit {
 
   editarDetalle(event: any) {
     this.detalleService.obtenerDetallePorId(event).subscribe((x: any) => {
-      console.log(x);
       this.cantidad = x.cantidad;
       this.descuento = x.descuento;
       this.preciounidad = x.preciounidad;
@@ -237,6 +238,7 @@ export class HistorialventasComponent implements OnInit {
       ) {
         filtrado.push(x);
         this.listaVentas = filtrado;
+        this.suggestions = filtrado;
       }
     }
   }
@@ -254,6 +256,7 @@ export class HistorialventasComponent implements OnInit {
       ) {
         filtrado.push(x);
         this.listaVentas = filtrado;
+        this.suggestions = filtrado;
       }
     }
   }
@@ -270,6 +273,7 @@ export class HistorialventasComponent implements OnInit {
       ) {
         filtrado.push(x);
         this.listaVentas = filtrado;
+        this.suggestions=filtrado;
       }
     }
   }
@@ -293,7 +297,6 @@ export class HistorialventasComponent implements OnInit {
   readExcel(event:any){
     let file = event.target.files[0];
     let fileRead = new FileReader();
-    console.log('Leyendo');
 
     fileRead.readAsBinaryString(file);
 
@@ -306,41 +309,24 @@ export class HistorialventasComponent implements OnInit {
       for (let i of this.ExcelData) {
         console.log(i);
 
-        // this.categoriaService.buscarCategoriaPorNombre(i.Categoria).subscribe((x:any)=>{
-        //   if (i.id != 0 || i.id != '') {
-        //     data = [{
-        //       id_proveedor: i.ID,
-        //       ciudad: i.Ciudad,
-        //       correo1: i.Correo_principal,
-        //       correo2: i.Correo_secundario,
-        //       direccion1: i.Direccion_principal,
-        //       direccion2: i.Direccion_secundaria,
-        //       nit: i.NIT,
-        //       nombre: i.Nombre,
-        //       nombreEmpresa: i.Nombre_de_la_empresa,
-        //       categoria:x
-        //     }];
-        //   } else {
-        //     data = [{
-        //       ciudad: i.Ciudad,
-        //       correo1: i.Correo_Principal,
-        //       correo2: i.Correo_Secundario,
-        //       direccion1: i.Direccion_principal,
-        //       direccion2: i.Direccion_secundaria,
-        //       nit: i.NIT,
-        //       nombre: i.Nombre,
-        //       nombreEmpresa: i.Nombre_de_la_empresa,
-        //       categoria:x
-        //     }];
-        //   }
-        //   lista.push(data);
-        //   this.proveedorService.agregarProveedor(data).subscribe((x:any)=>{
-        //     this.buscarProveedores();
-        //     this.excel="";
-        //   })
-
-        // })
-
+          if (i.ID != 0 && i.id != '' && i.ID != null && i.ID!= undefined) {
+            data = {
+              id: i.ID,
+              precio: i.Valor_total,
+              fecha: i.Fecha,
+              estado: i.Estado
+            };
+          } else {
+            data = {
+              precio: i.Valor_total,
+              fecha: i.Fecha,
+              estado: i.Estado
+            };
+          }
+          this.ventasService.GenerarVenta(data).subscribe((x:any)=>{
+            this.buscarVentas();
+            this.excel="";
+          })
       }
     };
   }

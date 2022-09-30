@@ -11,20 +11,20 @@
           <div class="flex">
             <span class="p-input-icon-left ml-auto">
               <i class="pi pi-search"></i>
-              <p-autoComplete field="nombre" [(ngModel)]="buscador" (completeMethod)="filtro(buscador)">
+              <p-autoComplete placeholder="ID, Valor Total" [suggestions]="suggestions" [(ngModel)]="buscador" (completeMethod)="filtro(buscador)">
               </p-autoComplete>
               <button type="submit" (click)="buscarVentas()">Reiniciar</button>
             </span>
             <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
-            <input type="file" (change)="readExcel($event)">
+            <input type="file" [(ngModel)]="excel" (change)="readExcel($event)">
           </div>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th>ID<br><p-autoComplete field="nombre" [(ngModel)]="buscador1" (completeMethod)="filtroId(buscador1)">
+            <th>ID<br><p-autoComplete [suggestions]="suggestions" [(ngModel)]="buscador1" (completeMethod)="filtroId(buscador1)">
             </p-autoComplete>
             </th>
-            <th>Valor total<br><p-autoComplete field="nombre" [(ngModel)]="buscador2" (completeMethod)="filtroPrecio(buscador2)">
+            <th>Valor total<br><p-autoComplete [suggestions]="suggestions" [(ngModel)]="buscador2" (completeMethod)="filtroPrecio(buscador2)">
             </p-autoComplete>
             </th>
             <th>Fecha<p-columnFilter type="text" field="fecha" display="menu"></p-columnFilter>

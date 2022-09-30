@@ -32,12 +32,11 @@
               "node_modules/sweetalert2/src/sweetalert2.scss"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/@popperjs/core/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/jquery/dist/*.js",
+              "node_modules/@popperjs/core/dist/umd/*.js",
+              "node_modules/bootstrap/dist/js/*.js",
               "node_modules/sweetalert2/src/sweetalert2.js",
-              "node_modules/chart.js/dist/chart.js",
-              "node_modules/html2canvas/dist/html2canvas.min.js"
+              "node_modules/chart.js/dist/chart.js"
             ]
           },
           "configurations": {
