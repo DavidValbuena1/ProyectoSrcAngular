@@ -1,72 +1,139 @@
 <div class="container-fluid fondo">
-    <div class="row">
-        <div class="col-lg-12 d-flex justify-content-center">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <button class="navbar-toggler bg-white mb-2" type="button" data-toggle="collapse"
-                    data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="container-fluid fondo2 shadow-sm">
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <div class="row m-3">
-                                <div class="col-lg-4">
-                                    <li class="nav-item">
-                                        <button class="button" (click)="irlogin()">
-                                            Inicio de sesión
-                                        </button>
-                                    </li>
-                                </div>
-                                <div class="col-lg-4">
-                                    <li class="nav-item">
-                                        <button class="button" (click)="this.modalQuienesSomos=true">
-                                            ¿Quienes somos?
-                                        </button>
-                                    </li>
-                                </div>
-                                <div class="col-lg-3">
-                                    <li class="nav-item">
-                                        <button class="button">
-                                            ¡Contactanos!
-                                        </button>
-                                    </li>
-                                </div>
-                                
-                            </div>
-                        </ul>
-                    </div>
+  <div class="row">
+    <div class="col-lg-12 d-flex justify-content-center">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <button class="navbar-toggler bg-white mb-2" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container-fluid fondo2 shadow-sm">
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <div class="row m-3">
+
+                <div class="col-lg-6 d-flex justify-content-center">
+                  <li class="nav-item">
+                    <button class="button" (click)="this.modalQuienesSomos=true">
+                      ¿Quienes somos?
+                    </button>
+                  </li>
                 </div>
-            </nav>
+                <div class="col-lg-6 d-flex justify-content-center">
+                  <li class="nav-item">
+                    <button class="button">
+                      ¡Contactanos!
+                    </button>
+                  </li>
+                </div>
+
+              </div>
+            </ul>
+          </div>
         </div>
-        <div class="col-lg-12 d-flex justify-content-center align-items-center mt-5">
-            <h1 class="mt-5 texto2">Bienvenidos al Gran Madrugón</h1>
-        </div>
-        <div class="col-lg-12 mt-5 d-flex justify-content-center">
-            <button class="rounded-circle border border-primary btn-primary texto btn m-5" (click)="irlogin()">Ingresar</button>
-        </div>
+      </nav>
     </div>
+    <div class="col-lg-12 d-flex justify-content-center align-items-center mt-5">
+      <h1 class="mt-5 texto2">Bienvenidos al Gran Madrugón</h1>
+    </div>
+    <div class="col-lg-12 mt-5 d-flex justify-content-center">
+      <button class="button2 texto" (click)="irlogin()">Iniciar Sesión</button>
+    </div>
+  </div>
 </div>
 
 <div class="container">
-    <p-dialog [(visible)]="modalQuienesSomos" [modal]="true" [draggable]="false" [style]="{width: '42vw'}"
-        [breakpoints]="{'960px': '60vw'}">
-        <div class="row">
-            <div class="col-lg-4 d-flex justify-content-center">
-                <div class="card">
-                    Hola
-                </div>
-            </div>
-            <div class="col-lg-4 d-flex justify-content-center">
-                <div class="card">
-                    Hola
-                </div>
-            </div>
-            <div class="col-lg-4 d-flex justify-content-center">
-                <div class="card">
-                    Hola
-                </div>
-            </div>
+  <p-dialog [(visible)]="modalQuienesSomos" class="p-5" [modal]="true" [draggable]="false" [style]="{width: '80vw'}"
+    [breakpoints]="{'960px': '60vw'}">
+    <div class="row card">
+      <div class="col-lg-12 d-flex justify-content-center">
+        <div class="card-body">
+          <h1 class="card-title text-center">El Gran Madrugón</h1>
+          <p class="card-text text-center">Nos encontramos en la ciudad de Bogotá D.C
+            específicamente en la localidad de Ciudad Bolívar es una pequeña
+            empresa la cuál desde hace más de 20 años se dedica a la venta de
+            ropa y calzado para toda la familia con excelente calidad y
+            precios, además de un excelente ambiente laboral para que día tras
+            día el servicio al cliente sea el mejor. El Gran Madrugón siempre
+            se ha destacado por ser el negocio de la gente pues se encuentra en
+            un barrio popular de la ciudad lo que le permite a aquellas
+            personas comprar su vestuario y esto es muy importante ya que es
+            una carta de presentación donde quiera que vayas. La empresa El
+            Gran Madrugón desde sus inicios y hasta el día de hoy ha crecido
+            dentro de un ámbito familiar, busca expandirse y tener el local
+            como propio para así llegar a más personas y volverse una marca
+            nacional. Con el paso del tiempo fueron llegando nuevos productos
+            los cuales fueron incorporados al almacén para la venta, los cuales
+            suplían las necesidades que los clientes requerían y con está
+            acción los clientes volvían para quedarse. Siempre se ha
+            caracterizado por ser una empresa con gran responsabilidad laboral
+            y esto hace que no le fallen a sus clientes.</p>
         </div>
-    </p-dialog>
+      </div>
+      <div class="col-lg-12 mt-3 mb-3 d-flex justify-content-center">
+        <button
+          onclick="location.href='https://www.google.com/maps/place/El+Gran+Madrug%C3%B3n+de+Santo+Domingo/@4.579277,-74.1797817,15z/data=!4m2!3m1!1s0x0:0xe31cb4a1cb998ef5?sa=X&ved=2ahUKEwjP5o7qy8D6AhVwTDABHYa6BKoQ_BJ6BAhVEAU'"
+          class="button">Ver Mapa</button>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <h1 class="text-center">Desarrolladores</h1>
+      <div class="col-lg-4 d-flex justify-content-center mt-4">
+        <div class="card">
+          <img src="../../assets/david.jpg">
+          <div class="card-body">
+            <h1 class="card-title text-center">David Valbuena</h1>
+            <p class="card-text"><strong>Edad:</strong> 20 años</p>
+            <p class="card-text"><strong>Correo:</strong> david310702@gmail.com</p>
+            <p class="card-text"><strong>Telefono</strong>: 3144241394</p>
+            <button type="submit" class="button3" onclick="location.href='https://wa.me/+573144241394'"><button class="button3">
+              <div class="svg-wrapper-1">
+                <div class="svg-wrapper">
+                  <i class="pi pi-whatsapp"></i>
+                </div>
+              </div>
+              <span>WhatsApp</span>
+            </button></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 d-flex justify-content-center mt-4">
+        <div class="card">
+          <img src="../../assets/david.jpg">
+          <div class="card-body">
+            <h1 class="card-title text-center">Diego Ramirez</h1>
+            <p class="card-text"><strong>Edad:</strong> 18 años</p>
+            <p class="card-text"><strong>Correo:</strong> dr595442@gmail.com</p>
+            <p class="card-text"><strong>Telefono</strong>: 3053928863</p>
+            <button type="submit" class="button3" onclick="location.href='https://wa.me/+573053928863'"><button class="button3">
+              <div class="svg-wrapper-1">
+                <div class="svg-wrapper">
+                  <i class="pi pi-whatsapp"></i>
+                </div>
+              </div>
+              <span>WhatsApp</span>
+            </button></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 d-flex justify-content-center mt-4">
+        <div class="card">
+          <img src="../../assets/david.jpg">
+          <div class="card-body">
+            <h1 class="card-title text-center">Paula Triana</h1>
+            <p class="card-text"><strong>Edad:</strong>24 años</p>
+            <p class="card-text"><strong>Correo:</strong> paula.trianaramirez@gmail.com</p>
+            <p class="card-text"><strong>Telefono</strong>: 3243702469</p>
+            <button type="submit" class="button3" onclick="location.href='https://wa.me/+573243702469'"><button class="button3">
+              <div class="svg-wrapper-1">
+                <div class="svg-wrapper">
+                  <i class="pi pi-whatsapp"></i>
+                </div>
+              </div>
+              <span>WhatsApp</span>
+            </button></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
 </div>

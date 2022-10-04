@@ -34,6 +34,7 @@ import { UsuariosComponent } from './dashboard/admin/usuarios/usuarios.component
 import {CalendarModule} from 'primeng/calendar';
 import {PasswordModule} from 'primeng/password';
 import { VendedorComponent } from './dashboard/vendedor/vendedor.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,7 +71,8 @@ import { VendedorComponent } from './dashboard/vendedor/vendedor.component';
     TooltipModule,
     ToastModule,
     CalendarModule,
-    PasswordModule
+    PasswordModule,
+    GoogleMapsModule
   ],
   providers: [{provide:LocationStrategy, useClass: HashLocationStrategy},MessageService],
   bootstrap: [AppComponent]
