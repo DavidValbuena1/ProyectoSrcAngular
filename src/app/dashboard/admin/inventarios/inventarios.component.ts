@@ -1,15 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ResolvedReflectiveFactory } from '@angular/core';
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import { PrimeNGConfig } from 'primeng/api';
 import { CategoriaService } from 'src/app/servicios/categoria.service';
 import { ProveedorService } from 'src/app/servicios/proveedor.service';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
-import { ApplicationConfig } from '@angular/platform-browser';
+import { ApplicationConfig, DomSanitizer } from '@angular/platform-browser';
 import * as XLSX from 'xlsx';
 import { Chart } from 'chart.js';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-admin-inventarios',
@@ -22,7 +23,8 @@ export class InventariosAdminComponent implements OnInit {
     private primengConfig: PrimeNGConfig,
     private inventarioService: InventarioService,
     private categoriaService: CategoriaService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private sanitizer: DomSanitizer
   ) {}
 
   formRegistro: FormGroup;
@@ -35,6 +37,7 @@ export class InventariosAdminComponent implements OnInit {
   modalRegistro: boolean = false;
   botonActualizar: boolean = false;
   botonRegistrar: boolean = true;
+  modalimagen:boolean=false;
 
   //Creando filtros
   filtroCategoria: any[];
@@ -56,6 +59,11 @@ export class InventariosAdminComponent implements OnInit {
   id_producto: any;
   envio: boolean = false;
   myChart: Chart;
+
+  nombreimagen:any;
+  imagen:any="";
+  base64:any="";
+  retrievedImage:any;
 
   //Manejo de graficos dinamicos
   data: any;
@@ -87,7 +95,13 @@ export class InventariosAdminComponent implements OnInit {
   //Metodos para el CRUD y manejo de Datos de productos
   buscarProductos() {
     this.inventarioService.obtenerProductos().subscribe((x: any) => {
+
       this.listaProductos = x;
+      for(let f of x){
+        this.base64 = f.byteimagen;
+        f.byteimagen ='data:'+f.tipoimagen+';base64,'+this.base64;
+      }
+      this.base64="";
       this.buscador="";
     });
   }
@@ -162,24 +176,52 @@ export class InventariosAdminComponent implements OnInit {
           price: parseInt(this.preciounidad),
           type: this.categoria,
           proveedor: this.proveedor,
-          precioTotal: parseInt(this.cantidad) * parseInt(this.preciounidad),
+          precioTotal: parseInt(this.cantidad) * parseInt(this.preciounidad)
         },
       ];
+      const uploadImage = new FormData();
+      uploadImage.append("imagen", this.imagen);
       this.inventarioService.registrarProducto(data).subscribe((x: any) => {
-        this.cerrarModalRegistro();
-        Swal.fire(
-          '¡Excelente!',
-          'El producto "' +
-            x[0].nombre +
-            '" fue registrado exitosamente con el ID ' +
-            x[0].id_producto,
-          'success'
-        );
-        this.ngOnInit();
+        this.inventarioService.subirImagen(uploadImage,x[0].id_producto).subscribe((y:any)=>{
+          this.cerrarModalRegistro();
+            Swal.fire(
+              '¡Excelente!',
+              'El producto "' +
+                x[0].nombre +
+                '" fue registrado exitosamente con el ID ' +
+                x[0].id_producto,
+              'success'
+            );
+          this.ngOnInit();
+        })
       });
     }
   }
 
+  capturarImagen(event:any){
+    this.imagen=event.target.files[0];
+    if (this.imagen){
+      this.extraerBase64(this.imagen).then((imagen:any)=>{
+        this.base64=imagen.base;
+      })
+    }
+  }
+
+  extraerBase64 = async(event:any)=> new Promise((resolve,reject)=>{
+    if(event!=null && event!=""){
+      try{
+        const reader = new FileReader();
+        reader.readAsDataURL(event);
+        reader.onload = ()=>{
+          resolve({
+            base:reader.result
+          })
+        }
+      }catch(e){
+
+      }
+    }
+  })
   actualizarProducto() {
     this.envio = true;
     if (this.formRegistro.valid) {
@@ -247,6 +289,8 @@ export class InventariosAdminComponent implements OnInit {
     this.cantidad = '';
     this.botonRegistrar = true;
     this.botonActualizar = false;
+    this.imagen="";
+    this.base64="";
     this.envio = false;
   }
 
@@ -574,5 +618,11 @@ export class InventariosAdminComponent implements OnInit {
       ]),
       proveedor: new FormControl('', [Validators.required]),
     });
+  }
+
+  abrirmodalimagen(event:any,event2:any){
+    this.base64=event;
+    this.nombreimagen=event2;
+    this.modalimagen=true;
   }
 }

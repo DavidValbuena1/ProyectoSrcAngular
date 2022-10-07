@@ -32,4 +32,8 @@ export class InventarioService {
   generarReportePdf(){
     return this.http.get("https://proyectosioca.azurewebsites.net/Sioca/Producto/descargarReporte",{responseType:'blob'});
   }
+
+  subirImagen(data:FormData, id:any):any{
+    return this.http.put("https://proyectosioca.azurewebsites.net/Sioca/Producto/subirImagen/"+id,data);
+  }
 }
