@@ -9,3 +9,7 @@
 .imagen3{
   width: 20vw;
 }
+
+.centrar{
+  margin: 0 auto;
+}

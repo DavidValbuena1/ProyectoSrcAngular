@@ -92,149 +92,123 @@
     </div>
     <form class="mt-1" [formGroup]="formRegistro">
       <div class="row">
-        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
-          <span class="p-float-label">
-            <input id="nombre" type="text" [(ngModel)]="nombre" pInputText formControlName="nombre">
-            <label for="nombre">Nombre</label>
-          </span>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('nombre')?.valid"></i>
+        <div class="col-lg-6 mb-3 mt-4">
+          <div class="d-flex justify-content-center">
+            <span class="p-float-label">
+              <input id="nombre" type="text" [(ngModel)]="nombre" pInputText formControlName="nombre" (keyup)="this.envioNombre=true">
+              <label for="nombre">Nombre</label>
+            </span>
           </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('nombre')?.errors?.['required']"
-              pTooltip="Este campo no puede quedar vacío"></i>
+          <div class="d-flex justify-content-center" *ngIf="this.envioNombre">
+              <span class="text-danger" *ngIf="this.formRegistro.get('nombre')?.errors?.['required']">Este campo no puede quedar vacío</span>
+            </div>
           </div>
-        </div>
-        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
-          <span class="p-float-label">
-            <p-autoComplete id="talla" [(ngModel)]="tallaseleccionada" [suggestions]="filtroTalla"
-              (completeMethod)="filtrarTallas($event)" field="talla" [dropdown]="true" formControlName="talla">
-              <ng-template let-c pTemplate="item">
-                <div>{{c.talla}}</div>
-              </ng-template>
-            </p-autoComplete>
-            <label for="talla">Seleccione la talla</label>
-          </span>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('talla')?.valid"></i>
+
+
+        <div class="col-lg-6 mb-3 mt-4">
+          <div class="d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-autoComplete id="talla" [(ngModel)]="tallaseleccionada" [suggestions]="filtroTalla"
+                (completeMethod)="filtrarTallas($event)" field="talla" [dropdown]="true" formControlName="talla" (keyup)="this.envioTalla=true">
+                <ng-template let-c pTemplate="item">
+                  <div>{{c.talla}}</div>
+                </ng-template>
+              </p-autoComplete>
+              <label for="talla">Seleccione la talla</label>
+            </span>
           </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('talla')?.errors?.['required']"
-              pTooltip="Este campo no puede quedar vacío"></i>
+          <div class="d-flex justify-content-center" *ngIf="this.envioTalla">
+            <span class="text-danger" *ngIf="this.formRegistro.get('talla')?.errors?.['required']">Este campo no puede quedar vacío</span>
           </div>
         </div>
 
-        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
-          <span class="p-float-label">
-            <input id="cantidad" type="text" [(ngModel)]="cantidad" pInputText [min]="1" formControlName="cantidad">
-            <label for="cantidad">Cantidad</label>
-          </span>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('cantidad')?.valid"></i>
+        <div class="col-lg-6 mb-3 mt-4">
+          <div class="d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-inputNumber id="cantidad" type="text" [(ngModel)]="cantidad"  [min]="1" formControlName="cantidad" (keyup)="this.envioCantidad=true"></p-inputNumber>
+              <label for="cantidad">Cantidad</label>
+            </span>
           </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('cantidad')?.errors?.['required']"
-              pTooltip="Este campo no puede quedar vacío"></i>
-          </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('cantidad')?.errors?.['min']"
-              pTooltip="Este campo no puede ser igual o menor a 0"></i>
+
+          <div class="d-flex justify-content-center" *ngIf="this.envioCantidad"> 
+            <span class="text-danger" *ngIf="this.formRegistro.get('cantidad')?.errors?.['required']">Este campo no puede quedar vacío</span>
+            <span class="text-danger" *ngIf="this.formRegistro.get('cantidad')?.errors?.['min']">Este campo no puede ser menor a 0</span>
           </div>
         </div>
 
 
-        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
-          <span class="p-float-label">
-            <p-autoComplete id="categoria" [(ngModel)]="categoria" [suggestions]="filtroCategoria"
-              (completeMethod)="filtrarCategoria($event)" field="nombre" [dropdown]="true" formControlName="categoria">
-              <ng-template let-c pTemplate="item">
-                <div>{{c.nombre}}</div>
-              </ng-template>
-            </p-autoComplete>
-            <label for="categoria">Seleccione la categoria</label>
-          </span>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('categoria')?.valid"></i>
+        <div class="col-lg-6 mb-3 mt-4">
+          <div class="d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-autoComplete id="categoria" [(ngModel)]="categoria" [suggestions]="filtroCategoria"
+                (completeMethod)="filtrarCategoria($event)" field="nombre" [dropdown]="true" formControlName="categoria" (onKeyUp)="this.envioCategoria=true">
+                <ng-template let-c pTemplate="item">
+                  <div>{{c.nombre}}</div>
+                </ng-template>
+              </p-autoComplete>
+              <label for="categoria">Seleccione la categoria</label>
+            </span>
           </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('categoria')?.errors?.['required']"
-              pTooltip="Este campo no puede quedar vacío"></i>
+          <div *ngIf="this.envioCategoria" class="d-flex justify-content-center">
+            <span class="text-danger" *ngIf="this.formRegistro.get('categoria')?.errors?.['required']">Este campo no puede quedar vacío</span>
           </div>
         </div>
 
 
-        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
-          <span class="p-float-label">
-            <input id="referencia" type="text" [(ngModel)]="referencia" pInputText formControlName="referencia">
-            <label for="referencia">Referencia</label>
-          </span>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('referencia')?.valid"></i>
+        <div class="col-lg-6 mb-3 mt-4 ">
+          <div class="d-flex justify-content-center">
+            <span class="p-float-label">
+              <input id="referencia" type="text" [(ngModel)]="referencia" pInputText formControlName="referencia" (keyup)="this.envioReferencia=true">
+              <label for="referencia">Referencia</label>
+            </span>
           </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('referencia')?.errors?.['required']"
-              pTooltip="Este campo no puede quedar vacío"></i>
+          <div *ngIf="this.envioReferencia" class="d-flex justify-content-center">
+            <span class="text-danger" *ngIf="this.formRegistro.get('referencia')?.errors?.['required']">Este campo no puede quedar vacío</span>
           </div>
         </div>
 
 
-        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
-          <span class="p-float-label">
-            <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
-              (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true" formControlName="proveedor">
-              <ng-template let-c pTemplate="item">
-                <div>{{c.nombre}}</div>
-              </ng-template>
-            </p-autoComplete>
-            <label for="proveedor">Seleccione el proveedor</label>
-          </span>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('proveedor')?.valid"></i>
+        <div class="col-lg-6 mb-3 mt-4">
+          <div class="d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-autoComplete id="proveedor" [(ngModel)]="proveedor" [suggestions]="filtroproveedor"
+                (completeMethod)="filtrarProveedor($event)" field="nombre" [dropdown]="true" formControlName="proveedor"  (onKeyUp)="this.envioProveedor=true">
+                <ng-template let-c pTemplate="item">
+                  <div>{{c.nombre}}</div>
+                </ng-template>
+              </p-autoComplete>
+              <label for="proveedor">Seleccione el proveedor</label>
+            </span>
           </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('proveedor')?.errors?.['required']"
-              pTooltip="Este campo no puede quedar vacío"></i>
+          
+          <div *ngIf="this.envioProveedor" class="d-flex justify-content-center">
+            <span class="text-danger" *ngIf="this.formRegistro.get('referencia')?.errors?.['required']">Este campo no puede quedar vacío</span>
           </div>
         </div>
 
 
-        <div class="col-lg-6 mb-3 mt-4 d-flex justify-content-center">
-          <span class="p-float-label">
-            <input id="preciounidad" type="text" [(ngModel)]="preciounidad" [min]="1" pInputText
-              formControlName="precioporunidad">
-            <label for="preciounidad">Precio por unidad</label>
-          </span>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('precioporunidad')?.valid"></i>
+        <div class="col-lg-6 mb-3 mt-4">
+          <div class="d-flex justify-content-center">
+            <span class="p-float-label">
+              <p-inputNumber id="preciounidad" type="text" [(ngModel)]="preciounidad" [min]="1" 
+                formControlName="precioporunidad" (keyup)="this.envioPrecio=true"></p-inputNumber>
+              <label for="preciounidad">Precio por unidad</label>
+            </span>
           </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('precioporunidad')?.errors?.['required']"
-              pTooltip="Este campo no puede quedar vacío"></i>
-          </div>
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('precioporunidad')?.errors?.['min']"
-              pTooltip="Este campo no puede ser menor o igual a 0"></i>
+
+          <div *ngIf="this.envioProveedor" class="d-flex justify-content-center">
+            <span class="text-danger" *ngIf="this.formRegistro.get('precioporunidad')?.errors?.['required']">Este campo no puede quedar vacío</span>
+            <span class="text-danger" *ngIf="this.formRegistro.get('precioporunidad')?.errors?.['min']">Este campo no puede ser menor o igual a 0</span>
           </div>
         </div>
 
-        <div class="col-lg-12 mt-4 d-flex justify-content-center">
-          <input type="file" [(ngModel)]="imagen" (change)="capturarImagen($event)" [ngModelOptions]="{standalone: true}">
+        <div class="col-lg-12 mt-4">
+          <div class="d-flex justify-content-center">
+            <input type="file" [(ngModel)]="imagen" (change)="capturarImagen($event)" formControlName="foto">
+          </div>
+          <div *ngIf="this.envioProveedor" class="d-flex justify-content-center">
+            <span class="text-danger" *ngIf="this.formRegistro.get('foto')?.errors?.['required']">Este campo no puede quedar vacío</span>
+          </div>
         </div>
         <div class="col-lg-12" *ngIf="base64">
           <button (click)='imagen=""; base64=""'>Quitar imagen</button>

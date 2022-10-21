@@ -446,7 +446,7 @@ export class ProveedoresAdminComponent implements OnInit {
 
   initForms(){
     this.formRegistro = new FormGroup({
-      nombre: new FormControl("",[Validators.required,Validators.maxLength(255)]),
+      nombre: new FormControl("",[Validators.required,Validators.maxLength(255),this.noWhitespaceValidator]),
       ciudad: new FormControl("",[Validators.required,Validators.maxLength(255)]),
       correo1: new FormControl("",[Validators.required,Validators.maxLength(255),Validators.email]),
       correo2: new FormControl("",[Validators.maxLength(255),Validators.email]),
@@ -457,6 +457,12 @@ export class ProveedoresAdminComponent implements OnInit {
       categoria: new FormControl ("",[Validators.required])
     })
   }
+
+  noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
+}
 
   generarReporte(){
     this.proveedorService.generarReportePdf().subscribe((x)=>{

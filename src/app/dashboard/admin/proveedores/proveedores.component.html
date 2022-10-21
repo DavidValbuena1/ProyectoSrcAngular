@@ -89,14 +89,13 @@
             <i class="pi pi-check text-success ms-1" style="font-size: 4vh"
               *ngIf="this.formRegistro.get('nombre')?.valid"></i>
           </div>
-
-          <div *ngIf="this.envio" class="d-flex align-items-center">
-            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
-              *ngIf="this.formRegistro.get('nombre')?.errors?.['required']" pTooltip="Este campo no puede quedar vacío"></i>
-          </div>
           <div *ngIf="this.envio" class="d-flex align-items-center">
             <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
               *ngIf="this.formRegistro.get('nombre')?.errors?.['maxlength']" pTooltip="Este campo no puede tener más de 255 caracteres"></i>
+          </div>
+          <div *ngIf="this.envio" class="d-flex align-items-center">
+            <i class="pi pi-times text-danger ms-1" style="font-size: 4vh"
+              *ngIf="this.formRegistro.get('nombre')?.errors?.['whitespace'] || this.formRegistro.get('nombre')?.errors?.['required']" pTooltip="Este campo no puede quedar vacío"></i>
           </div>
         </div>
 
