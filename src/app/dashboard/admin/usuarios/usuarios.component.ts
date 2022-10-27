@@ -69,7 +69,6 @@ export class UsuariosComponent implements OnInit {
   buscarUsuarios() {
     this.usuarioService.obtenerUsuarios().subscribe((x: any) => {
       this.listaUsuarios = x;
-      console.log(this.listaUsuarios);
     });
   }
 
@@ -106,12 +105,12 @@ export class UsuariosComponent implements OnInit {
             let data: any = {
               apellidos: this.apellidos,
               confirmar: this.confirmar,
-              contraseña: this.contrasena,
+              contrasena: this.contrasena,
               correo: this.correo,
               direccion: this.direccion,
               fecha: this.fechanacimiento,
               nombres: this.nombres,
-              num_Identificacion_usuario: this.numerodocumento,
+              num_identificacion_usuario: this.numerodocumento,
               rol: this.rol,
               telefono: this.telefono,
               tipoDocumento: this.tipodocumento,
@@ -191,7 +190,7 @@ export class UsuariosComponent implements OnInit {
           this.direccion = x.direccion;
           this.fechanacimiento = x.fecha;
           this.nombres = x.nombres;
-          this.numerodocumento = x.num_Identificacion_usuario;
+          this.numerodocumento = x.num_identificacion_usuario;
           this.rol = x.rol;
           this.telefono = x.telefono;
           this.tipodocumento = x.tipoDocumento;
@@ -227,12 +226,12 @@ export class UsuariosComponent implements OnInit {
             let data: any = {
               apellidos: this.apellidos,
               confirmar: this.confirmar,
-              contraseña: this.contrasena,
+              contrasena: this.contrasena,
               correo: this.correo,
               direccion: this.direccion,
               fecha: this.fechanacimiento,
               nombres: this.nombres,
-              num_Identificacion_usuario: this.numerodocumento,
+              num_identificacion_usuario: this.numerodocumento,
               rol: this.rol,
               telefono: this.telefono,
               tipoDocumento: this.tipodocumento,

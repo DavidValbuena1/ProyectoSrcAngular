@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   iniciarSesion() {
     let data = {
       correo: this.email,
-      contraseña: this.password,
+      contrasena: this.password,
     };
     this.usuarioservice.verificarUsuario(data).subscribe((x: any) => {
       localStorage.setItem("usuarioConectado", "");
