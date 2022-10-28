@@ -16,9 +16,16 @@ export class LoginComponent implements OnInit {
 
   email: any;
   password: any;
+  codigo:any;
+  usuario:any;
+  contrasena:any;
+  confirmar:any;
 
   formularioInicio:boolean=true;
   formularioRecuperar:boolean=false;
+  formularioCodigo:boolean=false;
+  formularioContrasena:boolean=false;
+  
   iniciarSesion() {
     let data = {
       correo: this.email,
@@ -45,7 +52,46 @@ export class LoginComponent implements OnInit {
     this.formularioRecuperar=true;
   }
 
-  enviarCorreoRecuperar(){
+  recuperarContrasena(){
+    let data ={
+      correo: this.email
+    }; 
+    this.usuarioservice.enviarCorreoRecuperar(data).subscribe((x:any)=>{   
+      Swal.fire(
+        '¡Bien!',
+        'Mensaje de verificación enviado',
+        'success'
+      );
+        this.formularioInicio=false;
+        this.formularioRecuperar=false;
+        this.formularioCodigo=true;
+    });
+  }
+
+  enviarCodigo(){
+    let data = {
+      codigorecuperacion: this.codigo,
+      usuario:{
+        correo:this.email
+      }
+    };
+    this.usuarioservice.enviarCodigo(data).subscribe((x:any)=>{
+      this.usuario=x;   
+      this.formularioCodigo=false;
+      this.formularioContrasena=true;
+    })
+  }
+
+  enviarContrasenaNueva(){
+    this.usuario.contrasena=this.contrasena;
+    this.usuario.confirmar=this.confirmar;
+    this.usuarioservice.editarUsuario(this.usuario,this.usuario.id_usuario).subscribe((x:any)=>{
+      console.log(x);
+      this.formularioRecuperar=false;
+      this.formularioCodigo=false;
+      this.formularioContrasena=false;
+      this.formularioInicio=true;
+    })
     
   }
 }

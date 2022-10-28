@@ -40,5 +40,11 @@ export class UsuarioService {
     return this.http.put("https://proyectosioca.azurewebsites.net/Sioca/Usuario/editar/"+id,data);
   }
 
+  enviarCorreoRecuperar(data:any){
+    return this.http.post("http://localhost:8881/Sioca/Usuario/recuperar",data);
+  }
 
+  enviarCodigo(data:any){
+    return this.http.post("http://localhost:8881/Sioca/Usuario/validarCodigo",data);
+  }
 }
