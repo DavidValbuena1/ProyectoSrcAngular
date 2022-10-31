@@ -41,10 +41,10 @@ export class UsuarioService {
   }
 
   enviarCorreoRecuperar(data:any){
-    return this.http.post("http://localhost:8881/Sioca/Usuario/recuperar",data);
+    return this.http.post("https://proyectosioca.azurewebsites.net/Sioca/Usuario/recuperar",data);
   }
 
   enviarCodigo(data:any){
-    return this.http.post("http://localhost:8881/Sioca/Usuario/validarCodigo",data);
+    return this.http.post("https://proyectosioca.azurewebsites.net/Sioca/Usuario/validarCodigo",data);
   }
 }

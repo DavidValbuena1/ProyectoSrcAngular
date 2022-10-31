@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { EmailValidator } from "@angular/forms";
+import { EmailValidator, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import Swal from "sweetalert2";
 import { UsuarioService } from "../servicios/usuario.service";
@@ -12,7 +12,11 @@ import { UsuarioService } from "../servicios/usuario.service";
 export class LoginComponent implements OnInit {
   constructor(private router: Router, private usuarioservice: UsuarioService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initForms();
+  }
+
+  formContrasena:FormGroup;
 
   email: any;
   password: any;
@@ -26,6 +30,13 @@ export class LoginComponent implements OnInit {
   formularioCodigo:boolean=false;
   formularioContrasena:boolean=false;
   
+
+  IrAIniciar(){
+    this.formularioInicio=true;
+    this.formularioRecuperar=false;
+    this.formularioCodigo=false;
+    this.formularioContrasena=false;
+  }
   iniciarSesion() {
     let data = {
       correo: this.email,
@@ -83,15 +94,22 @@ export class LoginComponent implements OnInit {
   }
 
   enviarContrasenaNueva(){
-    this.usuario.contrasena=this.contrasena;
-    this.usuario.confirmar=this.confirmar;
-    this.usuarioservice.editarUsuario(this.usuario,this.usuario.id_usuario).subscribe((x:any)=>{
-      console.log(x);
-      this.formularioRecuperar=false;
-      this.formularioCodigo=false;
-      this.formularioContrasena=false;
-      this.formularioInicio=true;
+    if(this.formContrasena.valid){
+      this.usuario.contrasena=this.contrasena;
+      this.usuario.confirmar=this.confirmar;
+      this.usuarioservice.editarUsuario(this.usuario,this.usuario.id_usuario).subscribe((x:any)=>{
+        this.formularioRecuperar=false;
+        this.formularioCodigo=false;
+        this.formularioContrasena=false;
+        this.formularioInicio=true;
+      })
+    } 
+  }
+
+  initForms(){
+    this.formContrasena = new FormGroup({
+      contrasena: new FormControl("",[Validators.required]),
+      confirmar: new FormControl("",[Validators.required])
     })
-    
   }
 }

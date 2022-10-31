@@ -1,6 +1,6 @@
 <div class="container-fluid fondo d-flex justify-content-center align-items-center">
   <div class="row">
-    <div class="col-lg-12 fondo2 border rounded border-dark shadow-lg formulario">
+    <div class="col-lg-12 fondo2 border rounded border-dark shadow-lg ">
       <img src="../../assets/logo3.png" class="img-fluid p-3">
       <h3 class="text-center mt-3 mb-4">Bienvenido a Sioca</h3>
       <form class="text-light" *ngIf="this.formularioInicio">
@@ -56,6 +56,9 @@
                 <span>Enviar correo</span>
               </button></button>
           </div>
+          <div class="col-lg-12 d-flex justify-content-center">
+            <button type="button" class="text-black" (click)="IrAIniciar()">Iniciar sesión</button>
+          </div>
         </div>
       </form>
       <form *ngIf="this.formularioCodigo" class="text-light">
@@ -85,20 +88,31 @@
         </div>
       </form>
 
-      <form *ngIf="this.formularioContrasena" class="text-light">
+      <form *ngIf="this.formularioContrasena" class="text-light" [formGroup]="formContrasena">
         <div class="row">
-          <div class="col-lg-12 d-flex justify-content-center mt-3">
+          <div class="col-lg-12 d-flex justify-content-center">
             <p class="text-center text-black">Ingresa tu nueva contraseña</p>
           </div>
-          <div class="col-lg-12 d-flex justify-content-center mt-3 mb-2">
-            <input class="input" placeholder="Ingresa la contraseña" type="text" [(ngModel)]="contrasena"
-              [ngModelOptions]="{standalone: true}">
+          
+          <div class="col-lg-12 d-flex justify-content-center mb-2">
+            <p-password [(ngModel)]="contrasena" [toggleMask]="true" strongRegex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})" formControlName="contrasena" placeholder="Ingresa la contraseña">
+                    <h6>Ingresa una contraseña</h6>
+              <ng-template pTemplate="footer">
+                  <p class="mt-2">Sugerencias</p>
+                  <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                      <li>Tiene que tener 1 letra en mayúscula</li>
+                      <li>Tiene que tener 1 letra en minúscula</li>
+                      <li>Tiene que tener 1 número</li>
+                      <li>Minimo 8 caracteres</li>
+                  </ul>
+              </ng-template>
+          </p-password>
           </div>
-          <div class="col-lg-12 d-flex justify-content-center mt-3 mb-2">
-            <input class="input" placeholder="Confirma la contraseña" type="text" [(ngModel)]="confirmar"
-              [ngModelOptions]="{standalone: true}">
+          <div class="col-lg-12 d-flex justify-content-center mb-2">
+            <p-password [(ngModel)]="confirmar" [toggleMask]="true" strongRegex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})" formControlName="confirmar" placeholder="Confirmar la contraseña">
+    </p-password>
           </div>
-          <div class="col-lg-12 d-flex justify-content-center mt-3 mb-4">
+          <div class="col-lg-12 d-flex justify-content-center mt-4 mb-4">
             <button type="submit" (click)="enviarContrasenaNueva()"><button>
                 <div class="svg-wrapper-1">
                   <div class="svg-wrapper">
