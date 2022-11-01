@@ -35,6 +35,7 @@ import {CalendarModule} from 'primeng/calendar';
 import {PasswordModule} from 'primeng/password';
 import { VendedorComponent } from './dashboard/vendedor/vendedor.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import {ProgressBarModule} from 'primeng/progressbar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,7 +73,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     ToastModule,
     CalendarModule,
     PasswordModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    ProgressBarModule
   ],
   providers: [{provide:LocationStrategy, useClass: HashLocationStrategy},MessageService],
   bootstrap: [AppComponent]

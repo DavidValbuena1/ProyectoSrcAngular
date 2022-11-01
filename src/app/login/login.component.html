@@ -132,4 +132,7 @@
     </div>
   </div>
 </div>
-<p-dialog [modal]="true" [closable]="false" [visible]="timer"></p-dialog>
+<p-dialog [modal]="true" [closable]="false" [visible]="timer">
+  <h5>Cargando datos</h5>
+  <p-progressBar mode="indeterminate" [style]="{'height': '20px'}"></p-progressBar>
+</p-dialog>

@@ -28,11 +28,11 @@ export class InventariosAdminComponent implements OnInit {
     private primengConfig: PrimeNGConfig,
     private inventarioService: InventarioService,
     private categoriaService: CategoriaService,
-    private excelService: ExcelService,
-    private sanitizer: DomSanitizer
+    private excelService: ExcelService
   ) {}
 
   formRegistro: FormGroup;
+  formEdicion: FormGroup;
   //Creando las listas a usar
   listaProductos: any[] = [];
   listaCategorias: any[];
@@ -40,9 +40,8 @@ export class InventariosAdminComponent implements OnInit {
 
   //Creando variables para manejo de modales
   modalRegistro: boolean = false;
-  botonActualizar: boolean = false;
-  botonRegistrar: boolean = true;
   modalimagen: boolean = false;
+  modalEdicion:boolean=false;
 
   //Creando filtros
   filtroCategoria: any[];
@@ -94,7 +93,10 @@ export class InventariosAdminComponent implements OnInit {
   excel: any;
   ExcelData: any[];
 
+  timer:boolean=false;
+
   ngOnInit(): void {
+    this.timer=true
     this.primengConfig.ripple = true;
     this.buscarProductos();
     this.buscarCategorias();
@@ -102,6 +104,7 @@ export class InventariosAdminComponent implements OnInit {
     this.llenarTallas();
     this.llenarGraficoDeDona();
     this.initForms();
+    
   }
 
   //Metodos para el CRUD y manejo de Datos de productos
@@ -132,9 +135,7 @@ export class InventariosAdminComponent implements OnInit {
       this.preciounidad = this.producto.price;
       this.cantidad = this.producto.quantity;
       this.referencia = this.producto.reference;
-      this.modalRegistro = true;
-      this.botonRegistrar = false;
-      this.botonActualizar = true;
+      this.modalEdicion = true;
     });
   }
 
@@ -278,7 +279,7 @@ export class InventariosAdminComponent implements OnInit {
     });
   actualizarProducto() {
     this.ActivarEnvios();
-    if (this.formRegistro.valid) {
+    if (this.formEdicion.valid) {
       let data: any = {
         id_producto: this.producto.id_producto,
         size: this.tallaseleccionada.talla,
@@ -336,6 +337,7 @@ export class InventariosAdminComponent implements OnInit {
   }
 
   cerrarModalRegistro() {
+    this.modalEdicion=false;
     this.modalRegistro = false;
     this.categoria = "";
     this.tallaseleccionada = "";
@@ -345,8 +347,6 @@ export class InventariosAdminComponent implements OnInit {
     this.preciounidad = "";
     this.proveedor = "";
     this.cantidad = "";
-    this.botonRegistrar = true;
-    this.botonActualizar = false;
     this.imagen = "";
     this.base64 = "";
     this.ReiniciarEnvios();
@@ -491,6 +491,7 @@ export class InventariosAdminComponent implements OnInit {
             indexAxis: "y",
           },
         });
+        this.timer=false;
       });
     });
   }
@@ -671,6 +672,18 @@ export class InventariosAdminComponent implements OnInit {
       ]),
       proveedor: new FormControl("", [Validators.required]),
       foto: new FormControl("",[Validators.required]) 
+    });
+    this.formEdicion = new FormGroup({
+      nombre: new FormControl("", [Validators.required]),
+      categoria: new FormControl("", [Validators.required]),
+      cantidad: new FormControl("", [Validators.required, Validators.min(1)]),
+      referencia: new FormControl("", [Validators.required]),
+      talla: new FormControl("", [Validators.required]),
+      precioporunidad: new FormControl("", [
+        Validators.required,
+        Validators.min(1),
+      ]),
+      proveedor: new FormControl("", [Validators.required])
     });
   }
 
