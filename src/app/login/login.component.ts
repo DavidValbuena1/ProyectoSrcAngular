@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
-import { EmailValidator, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { SwalComponent } from "@sweetalert2/ngx-sweetalert2";
 import Swal from "sweetalert2";
 import { UsuarioService } from "../servicios/usuario.service";
 
@@ -15,8 +16,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.initForms();
   }
-
+  @ViewChild('temporizador')
+  public readonly deleteSwal!: SwalComponent;
   formContrasena:FormGroup;
+  timer:boolean=false;
 
   email: any;
   password: any;
@@ -29,7 +32,7 @@ export class LoginComponent implements OnInit {
   formularioRecuperar:boolean=false;
   formularioCodigo:boolean=false;
   formularioContrasena:boolean=false;
-  
+
 
   IrAIniciar(){
     this.formularioInicio=true;
@@ -45,7 +48,7 @@ export class LoginComponent implements OnInit {
     this.usuarioservice.verificarUsuario(data).subscribe((x: any) => {
       localStorage.setItem("usuarioConectado", "");
       console.log(x);
-      
+
       if (x == null) {
         Swal.fire("¡Upss!", "El correo y la contraseña no coinciden", "error");
       } else if (x.rol.id == 1) {
@@ -64,10 +67,12 @@ export class LoginComponent implements OnInit {
   }
 
   recuperarContrasena(){
+    this.timer=true;
     let data ={
       correo: this.email
-    }; 
-    this.usuarioservice.enviarCorreoRecuperar(data).subscribe((x:any)=>{   
+    };
+    this.usuarioservice.enviarCorreoRecuperar(data).subscribe((x:any)=>{
+      this.timer=false;
       Swal.fire(
         '¡Bien!',
         'Mensaje de verificación enviado',
@@ -76,7 +81,16 @@ export class LoginComponent implements OnInit {
         this.formularioInicio=false;
         this.formularioRecuperar=false;
         this.formularioCodigo=true;
-    });
+    },error=>{
+      this.timer=false;
+      Swal.fire(
+        '¡Error!',
+        'Algo ocurrió y no pudimos enviar el codigo',
+        'error'
+      );
+      
+    }
+    );
   }
 
   enviarCodigo(){
@@ -87,7 +101,7 @@ export class LoginComponent implements OnInit {
       }
     };
     this.usuarioservice.enviarCodigo(data).subscribe((x:any)=>{
-      this.usuario=x;   
+      this.usuario=x;
       this.formularioCodigo=false;
       this.formularioContrasena=true;
     })
@@ -103,7 +117,7 @@ export class LoginComponent implements OnInit {
         this.formularioContrasena=false;
         this.formularioInicio=true;
       })
-    } 
+    }
   }
 
   initForms(){

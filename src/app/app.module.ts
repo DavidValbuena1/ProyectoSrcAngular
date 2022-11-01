@@ -34,7 +34,7 @@ import { UsuariosComponent } from './dashboard/admin/usuarios/usuarios.component
 import {CalendarModule} from 'primeng/calendar';
 import {PasswordModule} from 'primeng/password';
 import { VendedorComponent } from './dashboard/vendedor/vendedor.component';
-import { GoogleMapsModule } from '@angular/google-maps';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,7 +72,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     ToastModule,
     CalendarModule,
     PasswordModule,
-    GoogleMapsModule
+    SweetAlert2Module.forRoot()
   ],
   providers: [{provide:LocationStrategy, useClass: HashLocationStrategy},MessageService],
   bootstrap: [AppComponent]
