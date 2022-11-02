@@ -136,6 +136,8 @@ export class InventariosAdminComponent implements OnInit {
       this.cantidad = this.producto.quantity;
       this.referencia = this.producto.reference;
       this.modalEdicion = true;
+      console.log(this.producto);
+      
     });
   }
 
@@ -280,6 +282,7 @@ export class InventariosAdminComponent implements OnInit {
   actualizarProducto() {
     this.ActivarEnvios();
     if (this.formEdicion.valid) {
+      this.timer=true;
       let data: any = {
         id_producto: this.producto.id_producto,
         size: this.tallaseleccionada.talla,
@@ -289,7 +292,7 @@ export class InventariosAdminComponent implements OnInit {
         quantity: parseInt(this.cantidad),
         price: parseInt(this.preciounidad),
         type: this.categoria,
-        proveedor: this.proveedor,
+        proveedor: this.proveedor
       };
       this.inventarioService.actualizarProducto(data).subscribe((x: any) => {
         this.cerrarModalRegistro();
@@ -676,7 +679,7 @@ export class InventariosAdminComponent implements OnInit {
     this.formEdicion = new FormGroup({
       nombre: new FormControl("", [Validators.required]),
       categoria: new FormControl("", [Validators.required]),
-      cantidad: new FormControl("", [Validators.required, Validators.min(1)]),
+      cantidad: new FormControl("", [Validators.required, Validators.min(0)]),
       referencia: new FormControl("", [Validators.required]),
       talla: new FormControl("", [Validators.required]),
       precioporunidad: new FormControl("", [

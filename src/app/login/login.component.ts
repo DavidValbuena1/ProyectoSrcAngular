@@ -47,17 +47,19 @@ export class LoginComponent implements OnInit {
     };
     this.usuarioservice.verificarUsuario(data).subscribe((x: any) => {
       localStorage.setItem("usuarioConectado", "");
-      console.log(x);
-
       if (x == null) {
         Swal.fire("¡Upss!", "El correo y la contraseña no coinciden", "error");
       } else if (x.rol.id == 1) {
+        localStorage.setItem("usuarioConectado", x.rol.id);
+        localStorage.setItem("usuarioRol", x.rol.nombre);
+        localStorage.setItem("usuarioNombre", x.nombres + " " + x.apellidos);
         this.router.navigate(["administrador"]);
       } else if (x.rol.id == 2) {
+        localStorage.setItem("usuarioConectado", x.rol.id);
+        localStorage.setItem("usuarioRol", x.rol.nombre);
+        localStorage.setItem("usuarioNombre", x.nombres + " " + x.apellidos);
         this.router.navigate(["vendedor"]);
       }
-      localStorage.setItem("usuarioConectado", x.rol.id);
-      localStorage.setItem("usuarioNombre", x.nombres + " " + x.apellidos);
     });
   }
 
@@ -94,6 +96,7 @@ export class LoginComponent implements OnInit {
   }
 
   enviarCodigo(){
+    this.timer=true;
     let data = {
       codigorecuperacion: this.codigo,
       usuario:{
@@ -102,16 +105,28 @@ export class LoginComponent implements OnInit {
     };
     this.usuarioservice.enviarCodigo(data).subscribe((x:any)=>{
       this.usuario=x;
-      this.formularioCodigo=false;
-      this.formularioContrasena=true;
+      if(this.usuario!=null){
+        this.formularioCodigo=false;
+        this.timer=false;
+        this.formularioContrasena=true;
+      }else{
+        this.timer=false;
+        Swal.fire(
+          "¡Codigo invalido!",
+          "El codigo ingresado no es valido, puede que sea incorrecto o haya caducado",
+          "error"
+        )
+      }
     })
   }
 
   enviarContrasenaNueva(){
     if(this.formContrasena.valid){
+      this.timer=true;
       this.usuario.contrasena=this.contrasena;
       this.usuario.confirmar=this.confirmar;
       this.usuarioservice.editarUsuario(this.usuario,this.usuario.id_usuario).subscribe((x:any)=>{
+        this.timer=false;
         this.formularioRecuperar=false;
         this.formularioCodigo=false;
         this.formularioContrasena=false;

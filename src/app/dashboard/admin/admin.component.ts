@@ -14,6 +14,9 @@ export class AdminComponent implements OnInit {
   nombreBotonSeleccionado = '';
   barraLateralVisible: any;
 
+
+  nombre:any="";
+  rol:any="";
   ngOnInit(): void {
     this.primengConfig.ripple = true;
     this.verificarSesion();
@@ -22,11 +25,13 @@ export class AdminComponent implements OnInit {
   verificarSesion() {
     let user = localStorage.getItem('usuarioConectado');
     if (user == '1') {
-      let user2 = localStorage.getItem('usuarioNombre')
+      let user2 = localStorage.getItem('usuarioNombre');
       Swal.fire(
         '¡Bienvenido!',
         'Bienvenido Administrador ' + user2,
-        'success')
+        'success');
+        this.nombre = user2;
+        this.rol=localStorage.getItem('usuarioRol');
     } else if (user == '2') {
       this.router.navigate(['vendedor']);
       Swal.fire(

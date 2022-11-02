@@ -106,12 +106,13 @@ export class OrdenesAdminComponent implements OnInit {
               .subscribe((x: any) => {
                 this.ordenService
                   .enviarOrdenAlProveedor(this.carrito)
-                  .subscribe((x: any) => {});
-                Swal.fire(
-                  'Operación Exitosa',
-                  'Se genero la orden de compra y fue enviada una copia al proveedor por correo',
-                  'success'
-                );
+                  .subscribe((x: any) => {
+                    Swal.fire(
+                      'Operación Exitosa',
+                      'Se genero la orden de compra y fue enviada una copia al proveedor por correo',
+                      'success'
+                    );
+                  });
                 this.carrito = [];
                 this.proveedor = '';
                 this.precioTotal = '';
