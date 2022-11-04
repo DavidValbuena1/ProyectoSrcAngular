@@ -36,6 +36,7 @@ import {PasswordModule} from 'primeng/password';
 import { VendedorComponent } from './dashboard/vendedor/vendedor.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import {ProgressBarModule} from 'primeng/progressbar';
+import { HomeadminComponent } from './dashboard/admin/homeadmin/homeadmin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +50,8 @@ import {ProgressBarModule} from 'primeng/progressbar';
     HistorialordenesComponent,
     HistorialventasComponent,
     UsuariosComponent,
-    VendedorComponent
+    VendedorComponent,
+    HomeadminComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,6 @@
 import {
   Component,
-  Input,
   OnInit,
-  ResolvedReflectiveFactory,
 } from "@angular/core";
 import { InventarioService } from "src/app/servicios/inventario.service";
 import { PrimeNGConfig } from "primeng/api";
@@ -10,12 +8,13 @@ import { CategoriaService } from "src/app/servicios/categoria.service";
 import { ProveedorService } from "src/app/servicios/proveedor.service";
 import Swal from "sweetalert2";
 import { Subscription } from "rxjs";
-import { ApplicationConfig, DomSanitizer } from "@angular/platform-browser";
+import { ApplicationConfig } from "@angular/platform-browser";
 import * as XLSX from "xlsx";
 import { Chart } from "chart.js";
 import { ExcelService } from "src/app/servicios/excel.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { async } from "@angular/core/testing";
+
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-admin-inventarios",
@@ -28,7 +27,8 @@ export class InventariosAdminComponent implements OnInit {
     private primengConfig: PrimeNGConfig,
     private inventarioService: InventarioService,
     private categoriaService: CategoriaService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private router:Router
   ) {}
 
   formRegistro: FormGroup;
@@ -76,11 +76,6 @@ export class InventariosAdminComponent implements OnInit {
   base64: any = "";
   retrievedImage: any;
 
-  //Manejo de graficos dinamicos
-  data: any;
-  chartOptions: any;
-  subscription: Subscription;
-  config: ApplicationConfig;
 
   //Manejo de filtros para excel
   filtroExcel: any[];
@@ -94,8 +89,10 @@ export class InventariosAdminComponent implements OnInit {
   ExcelData: any[];
 
   timer:boolean=false;
+  vendedor:boolean=true;
 
   ngOnInit(): void {
+    this.verificarSesion();
     this.timer=true
     this.primengConfig.ripple = true;
     this.buscarProductos();
@@ -107,6 +104,17 @@ export class InventariosAdminComponent implements OnInit {
     
   }
 
+
+  verificarSesion() {
+    let user = localStorage.getItem('usuarioConectado');
+    if (user == '1') {
+      this.router.navigate(['administrador'])
+    } else if (user == '2') {
+      this.vendedor=false;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
   //Metodos para el CRUD y manejo de Datos de productos
   buscarProductos() {
     this.inventarioService.obtenerProductos().subscribe((x: any) => {

@@ -1,5 +1,6 @@
    import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {  Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DetalleventaService } from 'src/app/servicios/detalleventa.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
@@ -18,10 +19,12 @@ export class HistorialventasComponent implements OnInit {
     private detalleService: DetalleventaService,
     private productoService: InventarioService,
     private messageService: MessageService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private router:Router
   ) {}
 
   ngOnInit(): void {
+    this.verificarSesion();
     this.buscarVentas();
     this.buscarProductos();
     this.initForms();
@@ -58,6 +61,20 @@ export class HistorialventasComponent implements OnInit {
   //Variables para manejo de validaciones
   formParent: FormGroup;
   envio: boolean = false;
+
+  vendedor:boolean=true;
+
+
+  verificarSesion() {
+    let user = localStorage.getItem('usuarioConectado');
+    if (user == '1') {
+      this.router.navigate(['administrador'])
+    } else if (user == '2') {
+      this.vendedor=false;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
 
   //Metodos para manejo CRUD
   buscarVentas() {

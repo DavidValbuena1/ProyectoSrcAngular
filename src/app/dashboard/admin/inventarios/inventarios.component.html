@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row me-1 ms-1">
     <div class="col-md-7">
-      <button (click)="generarReporte()">Reporte PDF</button>
+      <button (click)="generarReporte()" *ngIf="this.vendedor">Reporte PDF</button>
       <button type="button" (click)="abrirmodalRegistro()" icon="pi pi-info-circle">Registrar</button>
       <p-table [value]="this.listaProductos" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
@@ -14,19 +14,16 @@
               </p-autoComplete>
               <button type="submit" (click)="buscarProductos()">Reiniciar</button>
             </span>
-            <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
-            <input type="file" [(ngModel)]="excel" (change)="readExcel($event)">
+            <button type="submit" (click)="exportExcel()" *ngIf="this.vendedor">Exportar a Excel</button>
+            <input type="file" [(ngModel)]="excel" (change)="readExcel($event)" *ngIf="this.vendedor">
           </div>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th>ID<br><p-autoComplete field="nombre" [(ngModel)]="buscador1" [suggestions]="suggestions" (completeMethod)="filtroId($event)">
-            </p-autoComplete>
-            </th>
             <th>Nombre<br><p-autoComplete field="nombre" [(ngModel)]="buscador2" [suggestions]="suggestions" (completeMethod)="filtroNombre($event)">
             </p-autoComplete>
             </th>
-            <th>Categoria<br><p-autoComplete field="nombre" [(ngModel)]="buscador1" [suggestions]="suggestions" (completeMethod)="filtroCategorias($event)">
+            <th *ngIf="this.vendedor">Categoria<br><p-autoComplete field="nombre" [(ngModel)]="buscador1" [suggestions]="suggestions" (completeMethod)="filtroCategorias($event)">
             </p-autoComplete>
             </th>
             <th>Cantidad<br><p-autoComplete field="nombre" [(ngModel)]="buscador1" [suggestions]="suggestions" (completeMethod)="filtroCantidad($event)">
@@ -38,30 +35,29 @@
             </th>
             <th>Precio por unidad<p-columnFilter type="text" field="price" display="menu"></p-columnFilter>
             </th>
-            <th>Precio total<p-columnFilter type="text" field="precioTotal" display="menu"></p-columnFilter>
+            <th *ngIf="this.vendedor">Precio total<p-columnFilter type="text" field="precioTotal" display="menu"></p-columnFilter>
             </th>
-            <th>Fecha de entrada<p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
+            <th *ngIf="this.vendedor">Fecha de entrada<p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
             </th>
-            <th>Proveedor<p-columnFilter type="text" field="proveedor.nombre" display="menu"></p-columnFilter>
+            <th *ngIf="this.vendedor">Proveedor<p-columnFilter type="text" field="proveedor.nombre" display="menu"></p-columnFilter>
             </th>
             <th>Imagen</th>
-            <th></th>
+            <th *ngIf="this.vendedor"></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-producto>
           <tr>
-            <td>{{producto.id_producto}}</td>
             <td>{{producto.nombre}}</td>
-            <td>{{producto.type.nombre}}</td>
+            <td *ngIf="this.vendedor">{{producto.type.nombre}}</td>
             <td>{{producto.quantity}}</td>
             <td>{{producto.reference}}</td>
             <td>{{producto.size}}</td>
             <td>{{producto.price}}</td>
-            <td>{{producto.precioTotal}}</td>
-            <td>{{producto.date}}</td>
-            <td>{{producto.proveedor.nombre}}</td>
+            <td *ngIf="this.vendedor">{{producto.precioTotal}}</td>
+            <td *ngIf="this.vendedor">{{producto.date}}</td>
+            <td *ngIf="this.vendedor">{{producto.proveedor.nombre}}</td>
             <td><img [src]="producto.byteimagen" class="imagen1" (click)="abrirmodalimagen(producto.byteimagen,producto.nombre)"></td>
-            <td class="d-flex">
+            <td class="d-flex" *ngIf="this.vendedor">
               <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success ms-2 me-2"
                 (click)="buscarProductoPorId(producto.id_producto)"></button>
               <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"

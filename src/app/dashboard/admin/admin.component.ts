@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Chart } from "chart.js";
 import { PrimeNGConfig } from 'primeng/api';
 import Swal from 'sweetalert2';
 
@@ -13,6 +14,7 @@ export class AdminComponent implements OnInit {
 
   nombreBotonSeleccionado = '';
   barraLateralVisible: any;
+  myChart:Chart;
 
 
   nombre:any="";

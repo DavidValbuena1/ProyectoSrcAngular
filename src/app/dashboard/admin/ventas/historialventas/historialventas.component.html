@@ -2,7 +2,7 @@
 <div class="container-fluid">
   <div class="row me-1 ms-1">
     <div class="col-md-12">
-      <button type="button" (click)="generarReporte()" icon="pi pi-info-circle">Reporte PDF</button>
+      <button type="button" (click)="generarReporte()" icon="pi pi-info-circle" *ngIf="this.vendedor">Reporte PDF</button>
       <p-table [value]="listaVentas" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Viendo {first} de {last} registros, {totalRecords} registros en total"
         [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand"
@@ -15,8 +15,8 @@
               </p-autoComplete>
               <button type="submit" (click)="buscarVentas()">Reiniciar</button>
             </span>
-            <button type="submit" (click)="exportExcel()">Exportar a Excel</button>
-            <input type="file" [(ngModel)]="excel" (change)="readExcel($event)">
+            <button type="submit" (click)="exportExcel()" *ngIf="this.vendedor">Exportar a Excel</button>
+            <input type="file" [(ngModel)]="excel" (change)="readExcel($event)" *ngIf="this.vendedor">
           </div>
         </ng-template>
         <ng-template pTemplate="header">
@@ -31,7 +31,7 @@
             </th>
             <th>Estado<p-columnFilter type="text" field="estado" display="menu"></p-columnFilter>
             </th>
-            <th></th>
+            <th *ngIf="this.vendedor"></th>
             <th></th>
           </tr>
         </ng-template>
@@ -41,7 +41,7 @@
             <td>{{orden.precio}}</td>
             <td>{{orden.fecha}}</td>
             <td>{{orden.estado}}</td>
-            <td>
+            <td *ngIf="this.vendedor">
               <button pButton pRipple class="p-button-success ms-2 me-2" (click)="editarEstado(orden.id)">Editar
                 Estado</button><br>
             </td>
@@ -73,8 +73,6 @@
           styleClass="p-datatable-gridlines p-datatable-sm" responsiveLayout="scroll">
           <ng-template pTemplate="header">
             <tr>
-              <th>ID Detalle<p-columnFilter type="number" field="id" display="menu"></p-columnFilter>
-              </th>
               <th>ID Venta<p-columnFilter type="text" field="nombreproducto" display="menu"></p-columnFilter>
               </th>
               <th>Producto<p-columnFilter type="number" field="cantidadproducto" display="menu"></p-columnFilter>
@@ -88,19 +86,18 @@
               </th>
               <th>Subtotal<p-columnFilter type="text" field="observaciones" display="menu"></p-columnFilter>
               </th>
-              <th></th>
+              <th *ngIf="this.vendedor"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-detalles>
             <tr>
-              <td>{{detalles.iddetalle}}</td>
               <td>{{detalles.idventa.id}}</td>
               <td>{{detalles.idproducto.nombre}}</td>
               <td>{{detalles.cantidad}}</td>
               <td>{{detalles.preciounidad}}</td>
               <td>{{detalles.descuento}}</td>
               <td>{{detalles.subtotal}}</td>
-              <td>
+              <td *ngIf="this.vendedor">
                 <button pButton pRipple class="p-button-success ms-2 me-2"
                   (click)="editarDetalle(detalles.iddetalle)">Editar</button><br>
               </td>
